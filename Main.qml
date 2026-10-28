@@ -17,6 +17,10 @@ ApplicationWindow {
 
     color: isDarkMode ? "#0a0e1a" : "#f0f4f8"
 
+    Behavior on color {
+        ColorAnimation { duration: 300; easing.type: Easing.OutCubic }
+    }
+
     RowLayout {
         anchors.fill: parent
         spacing: 0
@@ -26,6 +30,10 @@ ApplicationWindow {
             Layout.fillHeight: true
             Layout.preferredWidth: 280
             color: isDarkMode ? "#0f172a" : "#ffffff"
+
+            Behavior on color {
+                ColorAnimation { duration: 300; easing.type: Easing.OutCubic }
+            }
 
             ColumnLayout {
                 anchors.fill: parent
@@ -43,7 +51,7 @@ ApplicationWindow {
                         Layout.preferredHeight: 44
                         radius: 12
                         gradient: Gradient {
-                            orientation: Qt.Horizontal  // CORRECTION ICI
+                            orientation: Gradient.Horizontal
                             GradientStop { position: 0.0; color: "#00d4ff" }
                             GradientStop { position: 1.0; color: "#00ff88" }
                         }
@@ -63,6 +71,10 @@ ApplicationWindow {
                         font.bold: true
                         color: isDarkMode ? "#f1f5f9" : "#0f172a"
                         Layout.fillWidth: true
+
+                        Behavior on color {
+                            ColorAnimation { duration: 300 }
+                        }
                     }
                 }
 
@@ -70,6 +82,10 @@ ApplicationWindow {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 1
                     color: isDarkMode ? "#1e293b" : "#e2e8f0"
+
+                    Behavior on color {
+                        ColorAnimation { duration: 300 }
+                    }
                 }
 
                 Text {
@@ -95,15 +111,40 @@ ApplicationWindow {
                         Layout.fillWidth: true
                         Layout.preferredHeight: 48
                         radius: 12
-                        color: root.currentPage === modelData.id
-                            ? (isDarkMode ? "rgba(0, 212, 255, 0.15)" : "rgba(0, 102, 255, 0.1)")
-                            : "transparent"
+                        color: "transparent"
 
+                        state: root.currentPage === modelData.id ? "active" : "inactive"
+
+                        states: [
+                            State {
+                                name: "active"
+                                PropertyChanges {
+                                    target: navItem
+                                    color: isDarkMode ? Qt.rgba(0, 212, 255, 0.15) : Qt.rgba(0, 102, 255, 0.1)
+                                }
+                            },
+                            State {
+                                name: "inactive"
+                                PropertyChanges {
+                                    target: navItem
+                                    color: "transparent"
+                                }
+                            }
+                        ]
+
+                        transitions: [
+                            Transition {
+                                ColorAnimation { duration: 200; easing.type: Easing.OutCubic }
+                            }
+                        ]
+
+                        // Barre d'accent centrée verticalement (corrigée)
                         Rectangle {
                             anchors.left: parent.left
-                            anchors.top: parent.top
-                            anchors.bottom: parent.bottom
+                            anchors.leftMargin: 0
+                            anchors.verticalCenter: parent.verticalCenter
                             width: 4
+                            height: 24
                             radius: 2
                             color: "#00d4ff"
                             visible: root.currentPage === modelData.id
@@ -115,12 +156,26 @@ ApplicationWindow {
                             anchors.rightMargin: 16
                             spacing: 12
 
-                            Image {
-                                Layout.preferredWidth: 20
-                                Layout.preferredHeight: 20
-                                source: modelData.icon
-                                fillMode: Image.PreserveAspectFit
-                                opacity: root.currentPage === modelData.id ? 1.0 : 0.6
+                            // Icône avec fond coloré
+                            Rectangle {
+                                Layout.preferredWidth: 24
+                                Layout.preferredHeight: 24
+                                radius: 6
+                                color: root.currentPage === modelData.id
+                                    ? Qt.rgba(0, 212, 255, 0.2)
+                                    : "transparent"
+
+                                Behavior on color {
+                                    ColorAnimation { duration: 200 }
+                                }
+
+                                Image {
+                                    anchors.centerIn: parent
+                                    width: 16
+                                    height: 16
+                                    source: modelData.icon
+                                    fillMode: Image.PreserveAspectFit
+                                }
                             }
 
                             Text {
@@ -131,19 +186,27 @@ ApplicationWindow {
                                     ? "#00d4ff"
                                     : (isDarkMode ? "#94a3b8" : "#475569")
                                 Layout.fillWidth: true
-                            }
-                        }
 
-                        Behavior on color {
-                            ColorAnimation { duration: 200 }
+                                Behavior on color {
+                                    ColorAnimation { duration: 200 }
+                                }
+                            }
                         }
 
                         MouseArea {
                             anchors.fill: parent
                             cursorShape: Qt.PointingHandCursor
                             hoverEnabled: true
-                            onEntered: if (root.currentPage !== modelData.id) navItem.color = isDarkMode ? "#1e293b" : "#f1f5f9"
-                            onExited: if (root.currentPage !== modelData.id) navItem.color = "transparent"
+                            onEntered: {
+                                if (root.currentPage !== modelData.id) {
+                                    navItem.color = isDarkMode ? "#1e293b" : "#f1f5f9"
+                                }
+                            }
+                            onExited: {
+                                if (root.currentPage !== modelData.id) {
+                                    navItem.color = "transparent"
+                                }
+                            }
                             onClicked: {
                                 root.currentPage = modelData.id
                                 root.pageKey++
@@ -158,6 +221,10 @@ ApplicationWindow {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 1
                     color: isDarkMode ? "#1e293b" : "#e2e8f0"
+
+                    Behavior on color {
+                        ColorAnimation { duration: 300 }
+                    }
                 }
 
                 Text {
@@ -181,12 +248,20 @@ ApplicationWindow {
                 Layout.preferredHeight: 80
                 color: isDarkMode ? "#111827" : "#ffffff"
 
+                Behavior on color {
+                    ColorAnimation { duration: 300; easing.type: Easing.OutCubic }
+                }
+
                 Rectangle {
                     anchors.bottom: parent.bottom
                     anchors.left: parent.left
                     anchors.right: parent.right
                     height: 1
                     color: isDarkMode ? "#1e293b" : "#e2e8f0"
+
+                    Behavior on color {
+                        ColorAnimation { duration: 300 }
+                    }
                 }
 
                 RowLayout {
@@ -214,12 +289,20 @@ ApplicationWindow {
                             font.pixelSize: 28
                             font.bold: true
                             color: isDarkMode ? "#f1f5f9" : "#0f172a"
+
+                            Behavior on color {
+                                ColorAnimation { duration: 300 }
+                            }
                         }
 
                         Text {
                             text: "Vue d'ensemble de votre atelier"
                             font.pixelSize: 13
                             color: isDarkMode ? "#94a3b8" : "#64748b"
+
+                            Behavior on color {
+                                ColorAnimation { duration: 300 }
+                            }
                         }
                     }
 
@@ -233,6 +316,10 @@ ApplicationWindow {
                         radius: 12
                         color: isDarkMode ? "#1e293b" : "#f1f5f9"
 
+                        Behavior on color {
+                            ColorAnimation { duration: 300 }
+                        }
+
                         Image {
                             anchors.centerIn: parent
                             width: 22
@@ -241,17 +328,16 @@ ApplicationWindow {
                             fillMode: Image.PreserveAspectFit
                         }
 
-                        Behavior on color {
-                            ColorAnimation { duration: 200 }
-                        }
-
                         MouseArea {
                             anchors.fill: parent
                             cursorShape: Qt.PointingHandCursor
                             hoverEnabled: true
                             onEntered: themeToggle.color = isDarkMode ? "#334155" : "#e2e8f0"
                             onExited: themeToggle.color = isDarkMode ? "#1e293b" : "#f1f5f9"
-                            onClicked: root.isDarkMode = !root.isDarkMode
+                            onClicked: {
+                                root.isDarkMode = !root.isDarkMode
+                                root.pageKey++
+                            }
                         }
                     }
 
@@ -261,7 +347,7 @@ ApplicationWindow {
                         Layout.preferredHeight: 48
                         radius: 24
                         gradient: Gradient {
-                            orientation: Qt.Horizontal  // CORRECTION ICI
+                            orientation: Gradient.Horizontal
                             GradientStop { position: 0.0; color: "#00d4ff" }
                             GradientStop { position: 1.0; color: "#00ff88" }
                         }

@@ -13,7 +13,6 @@ find_package(Qt6 REQUIRED COMPONENTS
 
 add_executable(techfix
     main.cpp
-    src/ui/components/CustomScrollBar.qml
 )
 
 qt_add_resources(techfix "qml"

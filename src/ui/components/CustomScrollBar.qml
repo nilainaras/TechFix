@@ -4,25 +4,30 @@ import QtQuick.Controls
 ScrollBar {
     id: control
 
-    orientation: Qt.Vertical
+    property bool isDarkMode: true
+
+    implicitWidth: 10
+    implicitHeight: 10
+
     policy: ScrollBar.AsNeeded
 
-    implicitWidth: orientation === Qt.Vertical ? 10 : 0
-    implicitHeight: orientation === Qt.Horizontal ? 10 : 0
-
-    background: Rectangle {
-        radius: 5
-        implicitWidth: 5
-        color: "#172554"
-        opacity: 0.7
-    }
-
     contentItem: Rectangle {
-        radius: 5
-        color: control.pressed ? "#00E5FF"
-             : control.hovered ? "#38BDF8"
-             : "#38BDF8"
-        implicitWidth: 6
-        implicitHeight: 30
+        implicitWidth: 8
+        implicitHeight: 8
+
+        radius: width / 2
+        color: control.pressed
+            ? (isDarkMode ? "#00d4ff" : "#0066ff")
+            : (isDarkMode ? "#334155" : "#cbd5e1")
+
+        opacity: control.active ? 1.0 : 0.0
+
+        Behavior on opacity {
+            NumberAnimation { duration: 200; easing.type: Easing.OutCubic }
+        }
+
+        Behavior on color {
+            ColorAnimation { duration: 200 }
+        }
     }
 }

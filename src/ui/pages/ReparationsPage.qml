@@ -11,13 +11,13 @@ Page {
     }
 
     ScrollView {
-        id: scrollView
+        id: scrollview
         anchors.fill: parent
         anchors.margins: 32
 
         ColumnLayout {
-            width: scrollView.availableWidth
-            spacing: 22
+            width: scrollview.availableWidth
+            spacing: 24
 
             RowLayout {
                 Layout.fillWidth: true
@@ -32,7 +32,6 @@ Page {
                         font.bold: true
                         color: isDarkMode ? "#f1f5f9" : "#0f172a"
                     }
-
                     Text {
                         text: "5 réparations au total"
                         font.pixelSize: 13
@@ -50,7 +49,7 @@ Page {
                     background: Rectangle {
                         radius: 12
                         gradient: Gradient {
-                            orientation: Qt.Horizontal
+                            orientation: Gradient.Horizontal
                             GradientStop { position: 0.0; color: "#00d4ff" }
                             GradientStop { position: 1.0; color: "#00ff88" }
                         }
@@ -79,30 +78,32 @@ Page {
 
                     delegate: Rectangle {
                         Layout.fillWidth: true
-                        Layout.preferredHeight: 100
-                        radius: 16
-                        color: isDarkMode ? "#1e293b" : "#ffffff"
-                        border.color: isDarkMode ? "#334155" : "#e2e8f0"
+                        Layout.preferredHeight: 96
+                        radius: 14
+                        color: isDarkMode ? "#151f2e" : "#ffffff"
                         border.width: 1
+                        border.color: isDarkMode ? "#263447" : "#e2e8f0"
 
                         RowLayout {
                             anchors.fill: parent
-                            anchors.margins: 20
+                            anchors.leftMargin: 20
+                            anchors.rightMargin: 20
+                            anchors.topMargin: 18
+                            anchors.bottomMargin: 18
                             spacing: 16
 
                             Rectangle {
-                                Layout.preferredWidth: 50
-                                Layout.preferredHeight: 50
+                                Layout.preferredWidth: 52
+                                Layout.preferredHeight: 52
                                 radius: 12
                                 color: Qt.rgba(0, 212, 255, 0.15)
 
                                 Text {
                                     anchors.centerIn: parent
                                     text: "#" + modelData.id
-                                    font.pixelSize: 14
+                                    font.pixelSize: 16
                                     font.bold: true
                                     color: "#00d4ff"
-                                    font.family: "Consolas"
                                 }
                             }
 
@@ -115,8 +116,9 @@ Page {
                                     font.pixelSize: 15
                                     font.bold: true
                                     color: isDarkMode ? "#f1f5f9" : "#0f172a"
+                                    elide: Text.ElideRight
+                                    Layout.fillWidth: true
                                 }
-
                                 Text {
                                     text: modelData.appareil + " • " + modelData.client
                                     font.pixelSize: 12
@@ -126,14 +128,13 @@ Page {
 
                             Column {
                                 Layout.preferredWidth: 120
-                                spacing: 4
+                                spacing: 2
 
                                 Text {
                                     text: "Technicien"
-                                    font.pixelSize: 11
+                                    font.pixelSize: 10
                                     color: isDarkMode ? "#64748b" : "#94a3b8"
                                 }
-
                                 Text {
                                     text: modelData.tech
                                     font.pixelSize: 13
@@ -144,20 +145,18 @@ Page {
 
                             Column {
                                 Layout.preferredWidth: 100
-                                spacing: 4
+                                spacing: 2
 
                                 Text {
                                     text: "Date"
-                                    font.pixelSize: 11
+                                    font.pixelSize: 10
                                     color: isDarkMode ? "#64748b" : "#94a3b8"
                                 }
-
                                 Text {
                                     text: modelData.date
                                     font.pixelSize: 13
                                     font.bold: true
                                     color: isDarkMode ? "#f1f5f9" : "#0f172a"
-                                    font.family: "Consolas"
                                 }
                             }
 
@@ -166,9 +165,9 @@ Page {
                                 Layout.preferredHeight: 32
                                 radius: 16
                                 color: Qt.rgba(
-                                    parseInt(modelData.statutColor.slice(1,3), 16)/255,
-                                    parseInt(modelData.statutColor.slice(3,5), 16)/255,
-                                    parseInt(modelData.statutColor.slice(5,7), 16)/255,
+                                    parseInt(modelData.statutColor.slice(1, 3), 16) / 255,
+                                    parseInt(modelData.statutColor.slice(3, 5), 16) / 255,
+                                    parseInt(modelData.statutColor.slice(5, 7), 16) / 255,
                                     0.15
                                 )
 

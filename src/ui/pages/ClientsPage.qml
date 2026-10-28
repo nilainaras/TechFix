@@ -17,9 +17,9 @@ Page {
 
         ColumnLayout {
             width: scrollview.availableWidth
-            spacing: 22
+            spacing: 24
 
-            // Header
+            // ============ HEADER ============
             RowLayout {
                 Layout.fillWidth: true
 
@@ -33,7 +33,6 @@ Page {
                         font.bold: true
                         color: isDarkMode ? "#f1f5f9" : "#0f172a"
                     }
-
                     Text {
                         text: "3 clients enregistrés"
                         font.pixelSize: 13
@@ -51,7 +50,7 @@ Page {
                     background: Rectangle {
                         radius: 12
                         gradient: Gradient {
-                            orientation: Qt.Horizontal
+                            orientation: Gradient.Horizontal
                             GradientStop { position: 0.0; color: "#00d4ff" }
                             GradientStop { position: 1.0; color: "#00ff88" }
                         }
@@ -65,7 +64,7 @@ Page {
                 }
             }
 
-            // Liste des clients
+            // ============ LISTE DES CLIENTS ============
             GridLayout {
                 Layout.fillWidth: true
                 columns: 3
@@ -74,66 +73,84 @@ Page {
 
                 Repeater {
                     model: [
-                        { nom: "Jean Dupont", email: "jean.dupont@email.com", tel: "06 12 34 56 78", appareils: 2 },
-                        { nom: "Marie Martin", email: "marie.martin@email.com", tel: "07 98 76 54 32", appareils: 1 },
-                        { nom: "TechCorp SARL", email: "contact@techcorp.fr", tel: "01 23 45 67 89", appareils: 1 }
+                        { nom: "Jean Dupont", email: "jean.dupont@email.com", tel: "06 12 34 56 78", appareils: 2, totalDepense: 275000, dateInscription: "15/09/2026", couleur: "#00d4ff" },
+                        { nom: "Marie Martin", email: "marie.martin@email.com", tel: "07 98 76 54 32", appareils: 1, totalDepense: 95000, dateInscription: "22/08/2026", couleur: "#a855f7" },
+                        { nom: "TechCorp SARL", email: "contact@techcorp.fr", tel: "01 23 45 67 89", appareils: 1, totalDepense: 165000, dateInscription: "10/07/2026", couleur: "#00ff88" }
                     ]
 
                     delegate: Rectangle {
                         Layout.fillWidth: true
-                        Layout.preferredHeight: 180
-                        Layout.preferredWidth: 300
-                        radius: 20
-                        color: isDarkMode ? "#1e293b" : "#ffffff"
-                        border.color: isDarkMode ? "rgba(0, 212, 255, 0.15)" : "rgba(0, 102, 255, 0.1)"
+                        Layout.minimumWidth: 280
+                        Layout.preferredHeight: 240
+                        radius: 16
+                        color: isDarkMode ? "#151f2e" : "#ffffff"
                         border.width: 1
+                        border.color: Qt.rgba(0, 212, 255, 0.2)
+
+                        // Barre verticale style sidebar
+                        Rectangle {
+                            anchors.left: parent.left
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: 4
+                            height: parent.height - 80
+                            radius: 2
+                            color: modelData.couleur
+                        }
 
                         ColumnLayout {
                             anchors.fill: parent
-                            anchors.margins: 24
+                            anchors.leftMargin: 24
+                            anchors.rightMargin: 20
+                            anchors.topMargin: 20
+                            anchors.bottomMargin: 20
                             spacing: 12
 
+                            // Header : Avatar + Nom + Email
                             RowLayout {
                                 Layout.fillWidth: true
+                                spacing: 12
 
                                 Rectangle {
-                                    Layout.preferredWidth: 56
-                                    Layout.preferredHeight: 56
-                                    radius: 28
-                                    gradient: Gradient {
-                                        orientation: Qt.Horizontal
-                                        GradientStop { position: 0.0; color: "#00d4ff" }
-                                        GradientStop { position: 1.0; color: "#00ff88" }
-                                    }
+                                    Layout.preferredWidth: 52
+                                    Layout.preferredHeight: 52
+                                    radius: 26
+                                    color: Qt.rgba(
+                                        parseInt(modelData.couleur.slice(1, 3), 16) / 255,
+                                        parseInt(modelData.couleur.slice(3, 5), 16) / 255,
+                                        parseInt(modelData.couleur.slice(5, 7), 16) / 255,
+                                        0.15
+                                    )
 
                                     Text {
                                         anchors.centerIn: parent
                                         text: modelData.nom.charAt(0)
-                                        font.pixelSize: 22
+                                        font.pixelSize: 20
                                         font.bold: true
-                                        color: "#0a0e1a"
+                                        color: modelData.couleur
                                     }
                                 }
 
                                 Column {
                                     Layout.fillWidth: true
-                                    spacing: 4
+                                    spacing: 2
 
                                     Text {
                                         text: modelData.nom
-                                        font.pixelSize: 18
+                                        font.pixelSize: 16
                                         font.bold: true
                                         color: isDarkMode ? "#f1f5f9" : "#0f172a"
                                     }
-
                                     Text {
                                         text: modelData.email
-                                        font.pixelSize: 12
+                                        font.pixelSize: 11
                                         color: isDarkMode ? "#94a3b8" : "#64748b"
+                                        elide: Text.ElideRight
+                                        Layout.maximumWidth: 180
                                     }
                                 }
                             }
 
+                            // Infos : Téléphone + Appareils
                             RowLayout {
                                 Layout.fillWidth: true
                                 spacing: 16
@@ -160,19 +177,57 @@ Page {
                                         height: 14
                                     }
                                     Text {
-                                        text: modelData.appareils + " appareils"
+                                        text: modelData.appareils + " appareil" + (modelData.appareils > 1 ? "s" : "")
                                         font.pixelSize: 12
                                         color: isDarkMode ? "#94a3b8" : "#475569"
                                     }
                                 }
                             }
 
+                            // Stats : Total dépensé + Date inscription
+                            RowLayout {
+                                Layout.fillWidth: true
+                                spacing: 16
+
+                                Column {
+                                    spacing: 2
+
+                                    Text {
+                                        text: "Total dépensé"
+                                        font.pixelSize: 10
+                                        color: isDarkMode ? "#64748b" : "#94a3b8"
+                                    }
+                                    Text {
+                                        text: modelData.totalDepense.toLocaleString(Qt.locale("fr_FR")) + " Ar"
+                                        font.pixelSize: 14
+                                        font.bold: true
+                                        color: "#00ff88"
+                                    }
+                                }
+
+                                Column {
+                                    spacing: 2
+
+                                    Text {
+                                        text: "Inscrit le"
+                                        font.pixelSize: 10
+                                        color: isDarkMode ? "#64748b" : "#94a3b8"
+                                    }
+                                    Text {
+                                        text: modelData.dateInscription
+                                        font.pixelSize: 14
+                                        font.bold: true
+                                        color: isDarkMode ? "#f1f5f9" : "#0f172a"
+                                    }
+                                }
+                            }
+
+                            // Actions
                             Row {
-                                spacing: 8
-                                Layout.topMargin: 4
+                                spacing: 12
 
                                 Button {
-                                    text: "✏️ Modifier"
+                                    text: "Modifier"
                                     flat: true
                                     font.pixelSize: 12
                                     contentItem: Text {
@@ -181,9 +236,8 @@ Page {
                                         font: parent.font
                                     }
                                 }
-
                                 Button {
-                                    text: "🗑️ Supprimer"
+                                    text: "Supprimer"
                                     flat: true
                                     font.pixelSize: 12
                                     contentItem: Text {
