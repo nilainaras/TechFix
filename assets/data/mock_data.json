@@ -1,0 +1,210 @@
+{
+  "clients": [
+    {
+      "id_client": 1,
+      "nom": "Jean Dupont",
+      "email": "jean.dupont@email.com",
+      "telephone": "0612345678",
+      "adresse": "15 rue de la Paix, 75001 Paris",
+      "date_creation": "2026-09-15"
+    },
+    {
+      "id_client": 2,
+      "nom": "Marie Martin",
+      "email": "marie.martin@email.com",
+      "telephone": "0698765432",
+      "adresse": "8 avenue Victor Hugo, 69001 Lyon",
+      "date_creation": "2026-08-22"
+    },
+    {
+      "id_client": 3,
+      "nom": "TechCorp SARL",
+      "email": "contact@techcorp.fr",
+      "telephone": "0123456789",
+      "adresse": "42 boulevard Haussmann, 75009 Paris",
+      "date_creation": "2026-07-10"
+    }
+  ],
+  "appareils": [
+    {
+      "id_appareil": 1,
+      "id_client": 1,
+      "type": "Ordinateur portable",
+      "marque": "Dell",
+      "modele": "XPS 15 9530",
+      "numero_serie": "DL-XPS15-2024-001",
+      "date_ajout": "2026-09-15"
+    },
+    {
+      "id_appareil": 2,
+      "id_client": 2,
+      "type": "Smartphone",
+      "marque": "Samsung",
+      "modele": "Galaxy S24 Ultra",
+      "numero_serie": "SM-S928B-2024-042",
+      "date_ajout": "2026-08-22"
+    },
+    {
+      "id_appareil": 3,
+      "id_client": 3,
+      "type": "Serveur",
+      "marque": "HP",
+      "modele": "ProLiant DL380 Gen10",
+      "numero_serie": "HP-DL380-2023-156",
+      "date_ajout": "2026-07-10"
+    },
+    {
+      "id_appareil": 4,
+      "id_client": 1,
+      "type": "Tablette",
+      "marque": "Apple",
+      "modele": "iPad Pro 12.9 M2",
+      "numero_serie": "AP-IPAD-2024-089",
+      "date_ajout": "2026-10-01"
+    }
+  ],
+  "techniciens": [
+    {
+      "id_technicien": 1,
+      "nom": "Paul Tech",
+      "specialite": "Ordinateurs & Serveurs",
+      "email": "paul.tech@atelier.fr",
+      "telephone": "0611223344",
+      "actif": true,
+      "date_embauche": "2024-03-15"
+    },
+    {
+      "id_technicien": 2,
+      "nom": "Lucie Mobile",
+      "specialite": "Smartphones & Tablettes",
+      "email": "lucie.mobile@atelier.fr",
+      "telephone": "0655667788",
+      "actif": true,
+      "date_embauche": "2024-06-01"
+    },
+    {
+      "id_technicien": 3,
+      "nom": "Marc Réseau",
+      "specialite": "Réseau & Infrastructure",
+      "email": "marc.reseau@atelier.fr",
+      "telephone": "0699887766",
+      "actif": true,
+      "date_embauche": "2025-01-10"
+    }
+  ],
+  "reparations": [
+    {
+      "id_reparation": 1,
+      "id_appareil": 1,
+      "id_technicien": 1,
+      "panne": "Écran ne s'allume plus, possible problème de dalle LCD",
+      "statut": "En réparation",
+      "date_depot": "2026-10-20",
+      "date_diagnostic": "2026-10-21",
+      "date_fin": null,
+      "date_livraison": null
+    },
+    {
+      "id_reparation": 2,
+      "id_appareil": 2,
+      "id_technicien": 2,
+      "panne": "Batterie gonflée, remplacement nécessaire",
+      "statut": "Terminé",
+      "date_depot": "2026-10-15",
+      "date_diagnostic": "2026-10-16",
+      "date_fin": "2026-10-20",
+      "date_livraison": null
+    },
+    {
+      "id_reparation": 3,
+      "id_appareil": 3,
+      "id_technicien": 3,
+      "panne": "Erreur RAID, disque dur défaillant",
+      "statut": "Diagnostiqué",
+      "date_depot": "2026-10-18",
+      "date_diagnostic": "2026-10-19",
+      "date_fin": null,
+      "date_livraison": null
+    },
+    {
+      "id_reparation": 4,
+      "id_appareil": 4,
+      "id_technicien": 2,
+      "panne": "Écran fissuré après chute",
+      "statut": "Reçu",
+      "date_depot": "2026-10-25",
+      "date_diagnostic": null,
+      "date_fin": null,
+      "date_livraison": null
+    },
+    {
+      "id_reparation": 5,
+      "id_appareil": 1,
+      "id_technicien": 1,
+      "panne": "Clavier bloqué, touches coincées",
+      "statut": "Livré",
+      "date_depot": "2026-10-10",
+      "date_diagnostic": "2026-10-11",
+      "date_fin": "2026-10-13",
+      "date_livraison": "2026-10-14"
+    }
+  ],
+  "interventions": [
+    {
+      "id_intervention": 1,
+      "id_reparation": 1,
+      "type": "Pièce",
+      "description": "Remplacement dalle LCD 4K",
+      "cout": 180.00,
+      "date": "2026-10-22"
+    },
+    {
+      "id_intervention": 2,
+      "id_reparation": 1,
+      "type": "Main d'œuvre",
+      "description": "Démontage et remontage complet",
+      "cout": 45.00,
+      "date": "2026-10-22"
+    },
+    {
+      "id_intervention": 3,
+      "id_reparation": 2,
+      "type": "Pièce",
+      "description": "Remplacement batterie originale Samsung",
+      "cout": 65.00,
+      "date": "2026-10-18"
+    },
+    {
+      "id_intervention": 4,
+      "id_reparation": 2,
+      "type": "Main d'œuvre",
+      "description": "Installation et test batterie",
+      "cout": 30.00,
+      "date": "2026-10-18"
+    },
+    {
+      "id_intervention": 5,
+      "id_reparation": 3,
+      "type": "Diagnostic",
+      "description": "Diagnostic RAID complet et analyse SMART",
+      "cout": 80.00,
+      "date": "2026-10-19"
+    },
+    {
+      "id_intervention": 6,
+      "id_reparation": 5,
+      "type": "Pièce",
+      "description": "Clavier Dell original XPS 15",
+      "cout": 95.00,
+      "date": "2026-10-12"
+    },
+    {
+      "id_intervention": 7,
+      "id_reparation": 5,
+      "type": "Main d'œuvre",
+      "description": "Remplacement clavier et tests",
+      "cout": 40.00,
+      "date": "2026-10-13"
+    }
+  ]
+}
