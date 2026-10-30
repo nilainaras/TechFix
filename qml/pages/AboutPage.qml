@@ -10,12 +10,11 @@ PageScaffold {
     subtitle: "TechFix · version 1.0.0"
     maxContentWidth: 1080
 
-    // ✎ À COMPLÉTER PAR LE GROUPE : remplacez ces lignes par les membres de l'équipe.
     readonly property var team: [
-        { name: "Membre 1", role: "Rôle à définir" },
-        { name: "Membre 2", role: "Rôle à définir" },
-        { name: "Membre 3", role: "Rôle à définir" },
-        { name: "Membre 4", role: "Rôle à définir" }
+        { name: "Nilaina", role: "Frontend & Design" },
+        { name: "Voary", role: "Frontend & Design" },
+        { name: "Annicha", role: "Backend & Integration" },
+        { name: "Diary", role: "Backend & Integration" }
     ]
 
     readonly property var features: [

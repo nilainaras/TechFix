@@ -3,25 +3,7 @@ import QtQuick
 import "DemoData.js" as Demo   // DEMO (1/3) : à supprimer avec DemoData.js
 import TechFix
 
-// ─────────────────────────────────────────────────────────────────────────────
-//  AppData — données EN MÉMOIRE (aucun backend pour l'instant).
-//
-//  Les 5 tables du sujet sont des tableaux JavaScript :
-//    clients      { id, nom, telephone }
-//    appareils    { id, clientId, type, marque, modele, numeroSerie }
-//    techniciens  { id, nom, specialite }
-//    reparations  { id, appareilId, technicienId, panne, dateDepot, statut, timeline }
-//    interventions{ id, reparationId, description, cout, date }
-//
-//  Règles métier appliquées ici :
-//    • une réparation suit : reçu → diagnostic → en réparation → terminé → livré
-//      (pas de saut d'étape, pas de retour en arrière) ;
-//    • le coût final = somme des interventions (jamais stocké, toujours calculé) ;
-//    • pour terminer une réparation, il faut au moins une intervention.
-//
-//  Le jour où le vrai backend arrivera, seul ce fichier sera remplacé :
-//  les pages appellent uniquement ces fonctions.
-// ─────────────────────────────────────────────────────────────────────────────
+
 QtObject {
     id: root
 

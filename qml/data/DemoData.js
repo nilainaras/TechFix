@@ -1,14 +1,5 @@
 .pragma library
 
-// ─────────────────────────────────────────────────────────────────────────────
-//  DemoData — génère des données fictives réalistes (Madagascar, Ariary).
-//  Les dates sont relatives à aujourd'hui : le tableau de bord paraît toujours
-//  « vivant ». Le générateur est déterministe (même graine = mêmes données).
-//
-//  Montants : toujours des multiples de 5 000 Ar (le diagnostic coûte 5 000 Ar).
-//  Pour changer les prix, modifier les tableaux PANNES_* ci-dessous.
-// ─────────────────────────────────────────────────────────────────────────────
-
 var DAY = 86400000
 
 function rng(seed) {
