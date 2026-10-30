@@ -3,8 +3,10 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import "../components"
 
+// import TechFix 1.0
+
 Popup {
-    id: root
+    id: newClient
 
     property bool isDarkMode: true
 
@@ -14,24 +16,41 @@ Popup {
     height: 450
     padding: 0
 
-    background: Rectangle {
-        radius: 20
-        color: isDarkMode ? "#1e293b" : "#ffffff"
-        border.color: isDarkMode ? "#334155" : "#e2e8f0"
-        border.width: 1
+    background: Item {
+        Rectangle {
+            anchors.fill: parent
+            anchors.topMargin: 12
+            anchors.leftMargin: 4
+            anchors.rightMargin: -4
+            anchors.bottomMargin: -12
 
-        layer.enabled: true
-        layer.effect: DropShadow {
-            horizontalOffset: 0
-            verticalOffset: 8
             radius: 24
-            samples: 20
-            color: "rgba(0, 0, 0, 0.4)"
+            color: "#10000000"
+        }
+
+        Rectangle {
+            anchors.fill: parent
+            anchors.topMargin: 6
+            anchors.leftMargin: 2
+            anchors.rightMargin: -2
+            anchors.bottomMargin: -6
+
+            radius: 22
+            color: "#18000000"
+        }
+
+        Rectangle {
+            anchors.fill: parent
+
+            radius: 20
+            color: isDarkMode ? "#1e293b" : "#ffffff"
+            border.color: isDarkMode ? "#334155" : "#e2e8f0"
+            border.width: 1
         }
     }
 
     Overlay.modal: Rectangle {
-        color: "rgba(0, 0, 0, 0.6)"
+        color: Qt.rgba(0, 0, 0, 0.6)
         Behavior on color { ColorAnimation { duration: 300 } }
     }
 
@@ -75,7 +94,7 @@ Popup {
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: root.close()
+                        onClicked: newClient.close()
                     }
                 }
             }
@@ -101,7 +120,7 @@ Popup {
                     label: "Nom complet"
                     placeholderText: "Jean Dupont"
                     required: true
-                    isDarkMode: root.isDarkMode
+                    isDarkMode: newClient.isDarkMode
                     id: fieldName
                 }
 
@@ -109,14 +128,14 @@ Popup {
                     label: "Téléphone"
                     placeholderText: "06 12 34 56 78"
                     required: true
-                    isDarkMode: root.isDarkMode
+                    isDarkMode: newClient.isDarkMode
                     id: fieldPhone
                 }
 
                 FormField {
                     label: "Email"
                     placeholderText: "jean.dupont@email.com"
-                    isDarkMode: root.isDarkMode
+                    isDarkMode: newClient.isDarkMode
                     id: fieldEmail
                 }
 
@@ -124,7 +143,7 @@ Popup {
                     label: "Adresse"
                     placeholderText: "123 rue de la Paix, 75001 Paris"
                     isTextArea: true
-                    isDarkMode: root.isDarkMode
+                    isDarkMode: newClient.isDarkMode
                     id: fieldAddress
                 }
             }
@@ -157,7 +176,10 @@ Popup {
                         color: isDarkMode ? "#94a3b8" : "#64748b"
                         font: parent.font
                     }
-                    onClicked: root.close()
+                    onClicked: {
+
+                        newClient.close()
+                    }
                 }
 
                 Button {
@@ -181,8 +203,35 @@ Popup {
                     }
 
                     onClicked: {
-                        // Validation et création
-                        root.close()
+                        const nom = fieldName.value.trim()
+                        const telephone = fieldPhone.value.trim()
+
+                       //         // Vérifier les champs obligatoires
+                       //         if (nom === "") {
+                       //             fieldName.errorText = "Le nom est obligatoire."
+                       //             return
+                       //         }
+
+                       //         if (telephone === "") {
+                       //             fieldPhone.errorText = "Le téléphone est obligatoire."
+                       //             return
+                       //         }
+
+                        // Enregistrer dans la base de données
+                        const succes = clientManager.ajouterClient(
+                            nom,
+                            telephone
+                        )
+
+                        // if (succes) {
+                        //     fieldName.value = ""
+                        //     fieldPhone.value = ""
+                        //     fieldEmail.value = ""
+                        //     fieldAddress.value = ""
+
+                        //     newClient.close()
+                        // }
+                        newClient.close()
                     }
                 }
             }

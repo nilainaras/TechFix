@@ -4,7 +4,7 @@ import QtQuick.Layouts
 import "../components"
 
 Popup {
-    id: root
+    id: newReparation
 
     property bool isDarkMode: true
     property int currentStep: 1
@@ -16,24 +16,41 @@ Popup {
     height: 550
     padding: 0
 
-    background: Rectangle {
-        radius: 20
-        color: isDarkMode ? "#1e293b" : "#ffffff"
-        border.color: isDarkMode ? "#334155" : "#e2e8f0"
-        border.width: 1
+    background: Item {
+        Rectangle {
+            anchors.fill: parent
+            anchors.topMargin: 12
+            anchors.leftMargin: 4
+            anchors.rightMargin: -4
+            anchors.bottomMargin: -12
 
-        layer.enabled: true
-        layer.effect: DropShadow {
-            horizontalOffset: 0
-            verticalOffset: 8
             radius: 24
-            samples: 20
-            color: "rgba(0, 0, 0, 0.4)"
+            color: "#10000000"
+        }
+
+        Rectangle {
+            anchors.fill: parent
+            anchors.topMargin: 6
+            anchors.leftMargin: 2
+            anchors.rightMargin: -2
+            anchors.bottomMargin: -6
+
+            radius: 22
+            color: "#18000000"
+        }
+
+        Rectangle {
+            anchors.fill: parent
+
+            radius: 20
+            color: isDarkMode ? "#1e293b" : "#ffffff"
+            border.color: isDarkMode ? "#334155" : "#e2e8f0"
+            border.width: 1
         }
     }
 
     Overlay.modal: Rectangle {
-        color: "rgba(0, 0, 0, 0.6)"
+        color: Qt.rgba(0, 0, 0, 0.6)
         Behavior on color { ColorAnimation { duration: 300 } }
     }
 
@@ -77,7 +94,7 @@ Popup {
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: root.close()
+                        onClicked: newReparation.close()
                     }
                 }
             }
@@ -90,7 +107,7 @@ Popup {
             color: isDarkMode ? "#111827" : "#e2e8f0"
 
             Rectangle {
-                width: parent.width * (root.currentStep / root.totalSteps)
+                width: parent.width * (newReparation.currentStep / newReparation.totalSteps)
                 height: parent.height
                 radius: 2
                 gradient: Gradient {
@@ -125,25 +142,25 @@ Popup {
                             height: 32
                             radius: 16
                             color: {
-                                if (root.currentStep > index + 1) return "#00ff88"
-                                if (root.currentStep === index + 1) return "#00d4ff"
+                                if (newReparation.currentStep > index + 1) return "#00ff88"
+                                if (newReparation.currentStep === index + 1) return "#00d4ff"
                                 return isDarkMode ? "#334155" : "#e2e8f0"
                             }
 
                             Text {
                                 anchors.centerIn: parent
-                                text: root.currentStep > index + 1 ? "✓" : (index + 1)
+                                text: newReparation.currentStep > index + 1 ? "✓" : (index + 1)
                                 font.pixelSize: 14
                                 font.bold: true
-                                color: root.currentStep > index + 1 ? "#0a0e1a" : (root.currentStep === index + 1 ? "#0a0e1a" : (isDarkMode ? "#94a3b8" : "#64748b"))
+                                color: newReparation.currentStep > index + 1 ? "#0a0e1a" : (newReparation.currentStep === index + 1 ? "#0a0e1a" : (isDarkMode ? "#94a3b8" : "#64748b"))
                             }
                         }
 
                         Text {
                             text: modelData
                             font.pixelSize: 11
-                            color: root.currentStep === index + 1 ? "#00d4ff" : (isDarkMode ? "#94a3b8" : "#64748b")
-                            font.bold: root.currentStep === index + 1
+                            color: newReparation.currentStep === index + 1 ? "#00d4ff" : (isDarkMode ? "#94a3b8" : "#64748b")
+                            font.bold: newReparation.currentStep === index + 1
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
                     }
@@ -164,7 +181,7 @@ Popup {
 
             StackLayout {
                 width: parent.width
-                currentIndex: root.currentStep - 1
+                currentIndex: newReparation.currentStep - 1
 
                 // Étape 1 : Appareil
                 ColumnLayout {
@@ -182,14 +199,14 @@ Popup {
                         label: "Client"
                         placeholderText: "Sélectionner un client..."
                         required: true
-                        isDarkMode: root.isDarkMode
+                        isDarkMode: newReparation.isDarkMode
                     }
 
                     FormField {
                         label: "Appareil"
                         placeholderText: "Sélectionner un appareil..."
                         required: true
-                        isDarkMode: root.isDarkMode
+                        isDarkMode: newReparation.isDarkMode
                     }
                 }
 
@@ -209,14 +226,14 @@ Popup {
                         label: "Technicien"
                         placeholderText: "Sélectionner un technicien..."
                         required: true
-                        isDarkMode: root.isDarkMode
+                        isDarkMode: newReparation.isDarkMode
                     }
 
                     FormField {
                         label: "Date de dépôt"
                         placeholderText: "27/10/2026"
                         required: true
-                        isDarkMode: root.isDarkMode
+                        isDarkMode: newReparation.isDarkMode
                     }
                 }
 
@@ -237,14 +254,14 @@ Popup {
                         placeholderText: "Écran ne s'allume plus..."
                         required: true
                         isTextArea: true
-                        isDarkMode: root.isDarkMode
+                        isDarkMode: newReparation.isDarkMode
                     }
 
                     FormField {
                         label: "Notes supplémentaires"
                         placeholderText: "Informations additionnelles..."
                         isTextArea: true
-                        isDarkMode: root.isDarkMode
+                        isDarkMode: newReparation.isDarkMode
                     }
                 }
 
@@ -328,19 +345,19 @@ Popup {
                     text: "← Précédent"
                     flat: true
                     font.pixelSize: 14
-                    visible: root.currentStep > 1
+                    visible: newReparation.currentStep > 1
                     contentItem: Text {
                         text: parent.text
                         color: isDarkMode ? "#94a3b8" : "#64748b"
                         font: parent.font
                     }
-                    onClicked: root.currentStep--
+                    onClicked: newReparation.currentStep--
                 }
 
                 Item { Layout.fillWidth: true }
 
                 Button {
-                    text: root.currentStep === root.totalSteps ? "Créer la réparation" : "Suivant →"
+                    text: newReparation.currentStep === newReparation.totalSteps ? "Créer la réparation" : "Suivant →"
                     font.pixelSize: 14
                     font.bold: true
 
@@ -360,10 +377,10 @@ Popup {
                     }
 
                     onClicked: {
-                        if (root.currentStep < root.totalSteps) {
-                            root.currentStep++
+                        if (newReparation.currentStep < newReparation.totalSteps) {
+                            newReparation.currentStep++
                         } else {
-                            root.close()
+                            newReparation.close()
                         }
                     }
                 }

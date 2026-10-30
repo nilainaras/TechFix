@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import "../dialogs"
 
 Page {
     id: root
@@ -61,6 +62,12 @@ Page {
                         font: parent.font
                         horizontalAlignment: Text.AlignHCenter
                     }
+                    onClicked: {
+                        newAppareil.open()
+                    }
+                }
+                NewAppareilDialog{
+                    id: newAppareil
                 }
             }
 

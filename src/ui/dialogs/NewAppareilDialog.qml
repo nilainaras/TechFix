@@ -4,7 +4,7 @@ import QtQuick.Layouts
 import "../components"
 
 Popup {
-    id: root
+    id: newAppareil
 
     property bool isDarkMode: true
 
@@ -14,24 +14,41 @@ Popup {
     height: 500
     padding: 0
 
-    background: Rectangle {
-        radius: 20
-        color: isDarkMode ? "#1e293b" : "#ffffff"
-        border.color: isDarkMode ? "#334155" : "#e2e8f0"
-        border.width: 1
+    background: Item {
+        Rectangle {
+            anchors.fill: parent
+            anchors.topMargin: 12
+            anchors.leftMargin: 4
+            anchors.rightMargin: -4
+            anchors.bottomMargin: -12
 
-        layer.enabled: true
-        layer.effect: DropShadow {
-            horizontalOffset: 0
-            verticalOffset: 8
             radius: 24
-            samples: 20
-            color: "rgba(0, 0, 0, 0.4)"
+            color: "#10000000"
+        }
+
+        Rectangle {
+            anchors.fill: parent
+            anchors.topMargin: 6
+            anchors.leftMargin: 2
+            anchors.rightMargin: -2
+            anchors.bottomMargin: -6
+
+            radius: 22
+            color: "#18000000"
+        }
+
+        Rectangle {
+            anchors.fill: parent
+
+            radius: 20
+            color: isDarkMode ? "#1e293b" : "#ffffff"
+            border.color: isDarkMode ? "#334155" : "#e2e8f0"
+            border.width: 1
         }
     }
 
     Overlay.modal: Rectangle {
-        color: "rgba(0, 0, 0, 0.6)"
+        color: Qt.rgba(0, 0, 0, 0.6)
         Behavior on color { ColorAnimation { duration: 300 } }
     }
 
@@ -75,7 +92,7 @@ Popup {
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: root.close()
+                        onClicked: newAppareil.close()
                     }
                 }
             }
@@ -101,7 +118,7 @@ Popup {
                     label: "Client propriétaire"
                     placeholderText: "Sélectionner un client..."
                     required: true
-                    isDarkMode: root.isDarkMode
+                    isDarkMode: newAppareil.isDarkMode
                     id: fieldClient
                 }
 
@@ -109,7 +126,7 @@ Popup {
                     label: "Type d'appareil"
                     placeholderText: "Ordinateur portable, Smartphone..."
                     required: true
-                    isDarkMode: root.isDarkMode
+                    isDarkMode: newAppareil.isDarkMode
                     id: fieldType
                 }
 
@@ -117,7 +134,7 @@ Popup {
                     label: "Marque"
                     placeholderText: "Dell, Apple, Samsung..."
                     required: true
-                    isDarkMode: root.isDarkMode
+                    isDarkMode: newAppareil.isDarkMode
                     id: fieldMarque
                 }
 
@@ -125,7 +142,7 @@ Popup {
                     label: "Modèle"
                     placeholderText: "XPS 15, iPhone 14..."
                     required: true
-                    isDarkMode: root.isDarkMode
+                    isDarkMode: newAppareil.isDarkMode
                     id: fieldModele
                 }
 
@@ -133,7 +150,7 @@ Popup {
                     label: "Numéro de série"
                     placeholderText: "DL-XPS15-2024-001"
                     required: true
-                    isDarkMode: root.isDarkMode
+                    isDarkMode: newAppareil.isDarkMode
                     id: fieldSerial
                 }
             }
@@ -166,7 +183,7 @@ Popup {
                         color: isDarkMode ? "#94a3b8" : "#64748b"
                         font: parent.font
                     }
-                    onClicked: root.close()
+                    onClicked: newAppareil.close()
                 }
 
                 Button {
@@ -189,7 +206,7 @@ Popup {
                         horizontalAlignment: Text.AlignHCenter
                     }
 
-                    onClicked: root.close()
+                    onClicked: newAppareil.close()
                 }
             }
         }

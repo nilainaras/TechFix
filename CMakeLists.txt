@@ -8,12 +8,16 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS
-    Core Gui Quick QuickControls2 QuickLayouts Svg Qml
+    Core Gui Quick QuickControls2 QuickLayouts Svg Qml Sql
 )
 
 add_executable(techfix
     main.cpp
     src/ui/components/CustomScrollBar.qml
+    src/ui/database/databasemanager.h src/ui/database/databasemanager.cpp
+    src/ui/dialogs/clientmanager.h src/ui/dialogs/clientmanager.cpp
+    src/ui/dialogs/appareilmanager.h src/ui/dialogs/appareilmanager.cpp
+
 )
 
 qt_add_resources(techfix "qml"
@@ -90,5 +94,5 @@ qt_add_resources(techfix "qml"
 
 target_link_libraries(techfix PRIVATE
     Qt6::Core Qt6::Gui Qt6::Quick Qt6::QuickControls2
-    Qt6::QuickLayouts Qt6::Svg Qt6::Qml
+    Qt6::QuickLayouts Qt6::Svg Qt6::Qml Qt6::Sql
 )

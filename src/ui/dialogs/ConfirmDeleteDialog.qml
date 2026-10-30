@@ -4,7 +4,7 @@ import QtQuick.Layouts
 import "../components"
 
 Popup {
-    id: root
+    id: confirmDelete
 
     property bool isDarkMode: true
     property string itemName: ""
@@ -18,24 +18,41 @@ Popup {
     height: 280
     padding: 0
 
-    background: Rectangle {
-        radius: 20
-        color: isDarkMode ? "#1e293b" : "#ffffff"
-        border.color: isDarkMode ? "#334155" : "#e2e8f0"
-        border.width: 1
+    background: Item {
+        Rectangle {
+            anchors.fill: parent
+            anchors.topMargin: 12
+            anchors.leftMargin: 4
+            anchors.rightMargin: -4
+            anchors.bottomMargin: -12
 
-        layer.enabled: true
-        layer.effect: DropShadow {
-            horizontalOffset: 0
-            verticalOffset: 8
             radius: 24
-            samples: 20
-            color: "rgba(0, 0, 0, 0.4)"
+            color: "#10000000"
+        }
+
+        Rectangle {
+            anchors.fill: parent
+            anchors.topMargin: 6
+            anchors.leftMargin: 2
+            anchors.rightMargin: -2
+            anchors.bottomMargin: -6
+
+            radius: 22
+            color: "#18000000"
+        }
+
+        Rectangle {
+            anchors.fill: parent
+
+            radius: 20
+            color: isDarkMode ? "#1e293b" : "#ffffff"
+            border.color: isDarkMode ? "#334155" : "#e2e8f0"
+            border.width: 1
         }
     }
 
     Overlay.modal: Rectangle {
-        color: "rgba(0, 0, 0, 0.6)"
+        color: Qt.rgba(0, 0, 0, 0.6)
         Behavior on color { ColorAnimation { duration: 300 } }
     }
 
@@ -91,7 +108,7 @@ Popup {
 
             Text {
                 anchors.centerIn: parent
-                text: "Êtes-vous sûr de vouloir supprimer " + (root.itemName ? "\"" + root.itemName + "\"" : "cet " + root.itemType) + " ?\n\nCette action est irréversible."
+                text: "Êtes-vous sûr de vouloir supprimer " + (confirmDelete.itemName ? "\"" + confirmDelete.itemName + "\"" : "cet " + confirmDelete.itemType) + " ?\n\nCette action est irréversible."
                 font.pixelSize: 14
                 color: isDarkMode ? "#94a3b8" : "#475569"
                 horizontalAlignment: Text.AlignHCenter
@@ -132,7 +149,7 @@ Popup {
                         font: parent.font
                         horizontalAlignment: Text.AlignHCenter
                     }
-                    onClicked: root.close()
+                    onClicked: confirmDelete.close()
                 }
 
                 Button {
@@ -152,8 +169,8 @@ Popup {
                     }
 
                     onClicked: {
-                        root.confirmed()
-                        root.close()
+                        confirmDelete.confirmed()
+                        confirmDelete.close()
                     }
                 }
             }

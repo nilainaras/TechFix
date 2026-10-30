@@ -4,7 +4,7 @@ import QtQuick.Layouts
 import "../components"
 
 Popup {
-    id: root
+    id: newTecnicien
 
     property bool isDarkMode: true
 
@@ -14,24 +14,41 @@ Popup {
     height: 480
     padding: 0
 
-    background: Rectangle {
-        radius: 20
-        color: isDarkMode ? "#1e293b" : "#ffffff"
-        border.color: isDarkMode ? "#334155" : "#e2e8f0"
-        border.width: 1
+    background: Item {
+        Rectangle {
+            anchors.fill: parent
+            anchors.topMargin: 12
+            anchors.leftMargin: 4
+            anchors.rightMargin: -4
+            anchors.bottomMargin: -12
 
-        layer.enabled: true
-        layer.effect: DropShadow {
-            horizontalOffset: 0
-            verticalOffset: 8
             radius: 24
-            samples: 20
-            color: "rgba(0, 0, 0, 0.4)"
+            color: "#10000000"
+        }
+
+        Rectangle {
+            anchors.fill: parent
+            anchors.topMargin: 6
+            anchors.leftMargin: 2
+            anchors.rightMargin: -2
+            anchors.bottomMargin: -6
+
+            radius: 22
+            color: "#18000000"
+        }
+
+        Rectangle {
+            anchors.fill: parent
+
+            radius: 20
+            color: isDarkMode ? "#1e293b" : "#ffffff"
+            border.color: isDarkMode ? "#334155" : "#e2e8f0"
+            border.width: 1
         }
     }
 
     Overlay.modal: Rectangle {
-        color: "rgba(0, 0, 0, 0.6)"
+        color: Qt.rgba(0, 0, 0, 0.6)
         Behavior on color { ColorAnimation { duration: 300 } }
     }
 
@@ -75,7 +92,7 @@ Popup {
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: root.close()
+                        onClicked: newTecnicien.close()
                     }
                 }
             }
@@ -101,7 +118,7 @@ Popup {
                     label: "Nom complet"
                     placeholderText: "Paul Tech"
                     required: true
-                    isDarkMode: root.isDarkMode
+                    isDarkMode: newTecnicien.isDarkMode
                     id: fieldName
                 }
 
@@ -109,14 +126,14 @@ Popup {
                     label: "Spécialité"
                     placeholderText: "Ordinateurs, Smartphones, Réseau..."
                     required: true
-                    isDarkMode: root.isDarkMode
+                    isDarkMode: newTecnicien.isDarkMode
                     id: fieldSpecialite
                 }
 
                 FormField {
                     label: "Email"
                     placeholderText: "paul.tech@atelier.fr"
-                    isDarkMode: root.isDarkMode
+                    isDarkMode: newTecnicien.isDarkMode
                     id: fieldEmail
                 }
 
@@ -124,7 +141,7 @@ Popup {
                     label: "Téléphone"
                     placeholderText: "06 11 22 33 44"
                     required: true
-                    isDarkMode: root.isDarkMode
+                    isDarkMode: newTecnicien.isDarkMode
                     id: fieldPhone
                 }
 
@@ -192,7 +209,7 @@ Popup {
                         color: isDarkMode ? "#94a3b8" : "#64748b"
                         font: parent.font
                     }
-                    onClicked: root.close()
+                    onClicked: newTecnicien.close()
                 }
 
                 Button {
@@ -215,7 +232,7 @@ Popup {
                         horizontalAlignment: Text.AlignHCenter
                     }
 
-                    onClicked: root.close()
+                    onClicked: newTecnicien.close()
                 }
             }
         }

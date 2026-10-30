@@ -4,7 +4,7 @@ import QtQuick.Layouts
 import "../components"
 
 Popup {
-    id: root
+    id: newIntervention
 
     property bool isDarkMode: true
 
@@ -14,24 +14,41 @@ Popup {
     height: 420
     padding: 0
 
-    background: Rectangle {
-        radius: 20
-        color: isDarkMode ? "#1e293b" : "#ffffff"
-        border.color: isDarkMode ? "#334155" : "#e2e8f0"
-        border.width: 1
+    background: Item {
+        Rectangle {
+            anchors.fill: parent
+            anchors.topMargin: 12
+            anchors.leftMargin: 4
+            anchors.rightMargin: -4
+            anchors.bottomMargin: -12
 
-        layer.enabled: true
-        layer.effect: DropShadow {
-            horizontalOffset: 0
-            verticalOffset: 8
             radius: 24
-            samples: 20
-            color: "rgba(0, 0, 0, 0.4)"
+            color: "#10000000"
+        }
+
+        Rectangle {
+            anchors.fill: parent
+            anchors.topMargin: 6
+            anchors.leftMargin: 2
+            anchors.rightMargin: -2
+            anchors.bottomMargin: -6
+
+            radius: 22
+            color: "#18000000"
+        }
+
+        Rectangle {
+            anchors.fill: parent
+
+            radius: 20
+            color: isDarkMode ? "#1e293b" : "#ffffff"
+            border.color: isDarkMode ? "#334155" : "#e2e8f0"
+            border.width: 1
         }
     }
 
     Overlay.modal: Rectangle {
-        color: "rgba(0, 0, 0, 0.6)"
+        color: Qt.rgba(0, 0, 0, 0.6)
         Behavior on color { ColorAnimation { duration: 300 } }
     }
 
@@ -75,7 +92,7 @@ Popup {
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: root.close()
+                        onClicked: newIntervention.close()
                     }
                 }
             }
@@ -101,7 +118,7 @@ Popup {
                     label: "Type d'intervention"
                     placeholderText: "Pièce, Main d'œuvre, Diagnostic..."
                     required: true
-                    isDarkMode: root.isDarkMode
+                    isDarkMode: newIntervention.isDarkMode
                     id: fieldType
                 }
 
@@ -110,7 +127,7 @@ Popup {
                     placeholderText: "Remplacement de la dalle LCD..."
                     required: true
                     isTextArea: true
-                    isDarkMode: root.isDarkMode
+                    isDarkMode: newIntervention.isDarkMode
                     id: fieldDesc
                 }
 
@@ -118,7 +135,7 @@ Popup {
                     label: "Coût (€)"
                     placeholderText: "180.00"
                     required: true
-                    isDarkMode: root.isDarkMode
+                    isDarkMode: newIntervention.isDarkMode
                     id: fieldCost
                 }
 
@@ -126,7 +143,7 @@ Popup {
                     label: "Date"
                     placeholderText: "27/10/2026"
                     required: true
-                    isDarkMode: root.isDarkMode
+                    isDarkMode: newIntervention.isDarkMode
                     id: fieldDate
                 }
             }
@@ -159,7 +176,7 @@ Popup {
                         color: isDarkMode ? "#94a3b8" : "#64748b"
                         font: parent.font
                     }
-                    onClicked: root.close()
+                    onClicked: newIntervention.close()
                 }
 
                 Button {
@@ -182,7 +199,7 @@ Popup {
                         horizontalAlignment: Text.AlignHCenter
                     }
 
-                    onClicked: root.close()
+                    onClicked: newIntervention.close()
                 }
             }
         }

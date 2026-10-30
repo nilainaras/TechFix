@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import "../dialogs"
 
 Page {
     id: root
@@ -63,6 +64,12 @@ Page {
                         font: parent.font
                         horizontalAlignment: Text.AlignHCenter
                     }
+                    onClicked: {
+                        newIntervention.open()
+                    }
+                }
+                NewInterventionDialog {
+                    id: newIntervention
                 }
 
                 Item { Layout.fillWidth: true }

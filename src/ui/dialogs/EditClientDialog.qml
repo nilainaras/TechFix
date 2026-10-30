@@ -4,7 +4,7 @@ import QtQuick.Layouts
 import "../components"
 
 Popup {
-    id: root
+    id: editClient
 
     property bool isDarkMode: true
     property var clientData: ({})
@@ -15,24 +15,41 @@ Popup {
     height: 450
     padding: 0
 
-    background: Rectangle {
-        radius: 20
-        color: isDarkMode ? "#1e293b" : "#ffffff"
-        border.color: isDarkMode ? "#334155" : "#e2e8f0"
-        border.width: 1
+    background: Item {
+        Rectangle {
+            anchors.fill: parent
+            anchors.topMargin: 12
+            anchors.leftMargin: 4
+            anchors.rightMargin: -4
+            anchors.bottomMargin: -12
 
-        layer.enabled: true
-        layer.effect: DropShadow {
-            horizontalOffset: 0
-            verticalOffset: 8
             radius: 24
-            samples: 20
-            color: "rgba(0, 0, 0, 0.4)"
+            color: "#10000000"
+        }
+
+        Rectangle {
+            anchors.fill: parent
+            anchors.topMargin: 6
+            anchors.leftMargin: 2
+            anchors.rightMargin: -2
+            anchors.bottomMargin: -6
+
+            radius: 22
+            color: "#18000000"
+        }
+
+        Rectangle {
+            anchors.fill: parent
+
+            radius: 20
+            color: isDarkMode ? "#1e293b" : "#ffffff"
+            border.color: isDarkMode ? "#334155" : "#e2e8f0"
+            border.width: 1
         }
     }
 
     Overlay.modal: Rectangle {
-        color: "rgba(0, 0, 0, 0.6)"
+        color: QT.rgba(0, 0, 0, 0.6)
         Behavior on color { ColorAnimation { duration: 300 } }
     }
 
@@ -76,7 +93,7 @@ Popup {
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: root.close()
+                        onClicked: editClient.close()
                     }
                 }
             }
@@ -100,32 +117,32 @@ Popup {
 
                 FormField {
                     label: "Nom complet"
-                    value: root.clientData.nom || ""
+                    value: editClient.clientData.nom || ""
                     required: true
-                    isDarkMode: root.isDarkMode
+                    isDarkMode: editClient.isDarkMode
                     id: fieldName
                 }
 
                 FormField {
                     label: "Téléphone"
-                    value: root.clientData.telephone || ""
+                    value: editClient.clientData.telephone || ""
                     required: true
-                    isDarkMode: root.isDarkMode
+                    isDarkMode: editClient.isDarkMode
                     id: fieldPhone
                 }
 
                 FormField {
                     label: "Email"
-                    value: root.clientData.email || ""
-                    isDarkMode: root.isDarkMode
+                    value: editClient.clientData.email || ""
+                    isDarkMode: editClient.isDarkMode
                     id: fieldEmail
                 }
 
                 FormField {
                     label: "Adresse"
-                    value: root.clientData.adresse || ""
+                    value: editClient.clientData.adresse || ""
                     isTextArea: true
-                    isDarkMode: root.isDarkMode
+                    isDarkMode: editClient.isDarkMode
                     id: fieldAddress
                 }
             }
@@ -158,7 +175,7 @@ Popup {
                         color: isDarkMode ? "#94a3b8" : "#64748b"
                         font: parent.font
                     }
-                    onClicked: root.close()
+                    onClicked: editClient.close()
                 }
 
                 Button {
@@ -183,7 +200,7 @@ Popup {
 
                     onClicked: {
                         // Logique de modification
-                        root.close()
+                        editClient.close()
                     }
                 }
             }

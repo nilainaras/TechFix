@@ -221,6 +221,21 @@ ApplicationWindow {
                             font.pixelSize: 13
                             color: isDarkMode ? "#94a3b8" : "#64748b"
                         }
+                        Text {
+                            text: databaseManager.connected
+                                  ? "MySQL connecté"
+                                  : "MySQL non connecté"
+
+                            color: databaseManager.connected
+                                   ? "green"
+                                   : "red"
+                        }
+
+                        Text {
+                            visible: !databaseManager.connected
+                            text: databaseManager.lastError
+                            wrapMode: Text.Wrap
+                        }
                     }
 
                     Item { Layout.fillWidth: true }

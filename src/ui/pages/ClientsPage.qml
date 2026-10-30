@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import "../dialogs"
 
 Page {
     id: root
@@ -62,6 +63,12 @@ Page {
                         font: parent.font
                         horizontalAlignment: Text.AlignHCenter
                     }
+                    onClicked: {
+                        newClient.open()
+                    }
+                }
+                NewClientDialog {
+                    id: newClient
                 }
             }
 
@@ -167,7 +174,8 @@ Page {
                                 }
                             }
 
-                            Row {
+                            Row
+                            {
                                 spacing: 8
                                 Layout.topMargin: 4
 
@@ -180,6 +188,12 @@ Page {
                                         color: "#00d4ff"
                                         font: parent.font
                                     }
+                                    onClicked: {
+                                        editClient.open()
+                                    }
+                                }
+                                EditClientDialog{
+                                    id: editClient
                                 }
 
                                 Button {
