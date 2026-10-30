@@ -1,0 +1,26 @@
+// Ressources Windows : icône de l'exécutable et informations de version.
+// Ce fichier est transformé en "techfix.rc" par CMake (le chemin de l'icône est rempli automatiquement).
+#include <windows.h>
+
+IDI_ICON1 ICON "@CMAKE_CURRENT_SOURCE_DIR@/assets/windows/techfix.ico"
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION     @PROJECT_VERSION_MAJOR@,@PROJECT_VERSION_MINOR@,@PROJECT_VERSION_PATCH@,0
+PRODUCTVERSION  @PROJECT_VERSION_MAJOR@,@PROJECT_VERSION_MINOR@,@PROJECT_VERSION_PATCH@,0
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040C04B0"
+        BEGIN
+            VALUE "ProductName",      "TechFix"
+            VALUE "FileDescription",  "TechFix - Gestion d'un atelier de reparation informatique"
+            VALUE "FileVersion",      "@PROJECT_VERSION@"
+            VALUE "ProductVersion",   "@PROJECT_VERSION@"
+            VALUE "OriginalFilename", "appTechFix.exe"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x040C, 1200
+    END
+END
