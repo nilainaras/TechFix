@@ -41,6 +41,15 @@ QtObject {
         return String(Math.round(a))
     }
 
+    // Saisie « JJ/MM/AAAA » ↔ Date
+    function dateInput(d) { return pad(d.getDate(), 2) + "/" + pad(d.getMonth() + 1, 2) + "/" + d.getFullYear() }
+    function parseDate(s) {
+        var m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(String(s).trim())
+        if (!m) return null
+        var d = new Date(+m[3], +m[2] - 1, +m[1])
+        if (d.getFullYear() !== +m[3] || d.getMonth() !== +m[2] - 1 || d.getDate() !== +m[1]) return null
+        return d
+    }
     function date(d) { return d.getDate() + " " + months[d.getMonth()] + " " + d.getFullYear() }
     function dateShort(d) { return d.getDate() + " " + months[d.getMonth()] }
     function dateLong(d) {

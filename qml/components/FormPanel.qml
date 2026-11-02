@@ -26,16 +26,18 @@ SidePanel {
 
     function open(options) {
         spec = options
-        fields = options.fields || []
+        var list = options.fields || []
         var v = {}
-        for (var i = 0; i < fields.length; i++) {
-            var f = fields[i]
+        for (var i = 0; i < list.length; i++) {
+            var f = list[i]
             var init = (options.values && options.values[f.key] !== undefined) ? options.values[f.key] : ""
             v[f.key] = init
         }
+        // Les valeurs d'abord, les champs ensuite : un champ lit sa valeur initiale à sa création.
         values = v
         errors = ({})
         rev++
+        fields = list
         opened = true
     }
 
@@ -77,6 +79,11 @@ SidePanel {
                 if (isNaN(n) || n <= 0) e[f.key] = "Entrez un montant supérieur à 0."
                 else if (f.min !== undefined && n < f.min) e[f.key] = "Minimum : " + Fmt.ar(f.min) + "."
                 else if (f.max !== undefined && n > f.max) e[f.key] = "Maximum : " + Fmt.ar(f.max) + "."
+            }
+            if (f.type === "date") {
+                var dd = Fmt.parseDate(val)
+                if (!dd) e[f.key] = "Date invalide (ex. 28/10/2026)."
+                else if (dd.getTime() > Date.now()) e[f.key] = "La date ne peut pas être dans le futur."
             }
             if (f.type === "text" && f.minLength && val.length < f.minLength) e[f.key] = "Au moins " + f.minLength + " caractères."
         }

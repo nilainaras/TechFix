@@ -171,7 +171,8 @@ QtObject {
     }
 
     // ── Réparations ─────────────────────────────────────────────────────────
-    function repairFields() {
+    function repairFields(withDate) {
+        var dateField = withDate ? [{ key: "dateDepot", label: "Date de dépôt", type: "date", required: true, icon: "calendar", placeholder: "JJ/MM/AAAA" }] : []
         return [
             { key: "clientId", label: "Client", type: "select", required: true, options: clientOptions(), placeholder: "Choisir le client" },
             { key: "appareilId", label: "Appareil", type: "select", required: true, dependsOn: "clientId",
@@ -179,16 +180,16 @@ QtObject {
               placeholder: "Choisir l'appareil", emptyText: "Choisissez d'abord un client qui possède un appareil" },
             { key: "technicienId", label: "Technicien affecté", type: "select", required: true, options: technicienOptions(), placeholder: "Choisir le technicien" },
             { key: "panne", label: "Panne signalée", type: "multiline", required: true, minLength: 5, placeholder: "Ex. L'écran reste noir au démarrage" }
-        ]
+        ].concat(dateField)
     }
 
     function newRepair(clientId) {
         UI.openForm({
             title: "Nouvelle réparation", subtitle: "L'appareil entre à l'atelier au statut « Reçu ».", icon: "wrench", submitText: "Enregistrer le dépôt",
-            values: { clientId: clientId || "" },
-            fields: repairFields(),
+            values: { clientId: clientId || "", dateDepot: Fmt.dateInput(new Date()) },
+            fields: repairFields(true),
             onSubmit: function (v) {
-                var id = AppData.addReparation({ appareilId: v.appareilId, technicienId: v.technicienId, panne: v.panne.trim() })
+                var id = AppData.addReparation({ appareilId: v.appareilId, technicienId: v.technicienId, panne: v.panne.trim(), dateDepot: Fmt.parseDate(v.dateDepot) })
                 Qt.callLater(function () { UI.openRepair(id) })
                 return { ok: true, message: "Réparation " + Fmt.repairId(id) + " enregistrée." }
             }
@@ -201,11 +202,26 @@ QtObject {
         var ap = AppData.appareil(r.appareilId)
         UI.openForm({
             title: "Modifier la réparation", subtitle: Fmt.repairId(id), icon: "pencil", submitText: "Enregistrer",
-            values: { clientId: ap ? ap.clientId : "", appareilId: r.appareilId, technicienId: r.technicienId, panne: r.panne },
-            fields: repairFields(),
+            values: { clientId: ap ? ap.clientId : "", appareilId: r.appareilId, technicienId: r.technicienId, panne: r.panne, dateDepot: Fmt.dateInput(r.dateDepot) },
+            fields: repairFields(r.statut === 0),   // la date n'est modifiable qu'au statut « Reçu »
             onSubmit: function (v) {
-                AppData.updateReparation(id, { appareilId: v.appareilId, technicienId: v.technicienId, panne: v.panne.trim() })
+                AppData.updateReparation(id, { appareilId: v.appareilId, technicienId: v.technicienId, panne: v.panne.trim(), dateDepot: v.dateDepot ? Fmt.parseDate(v.dateDepot) : null })
                 return { ok: true, message: "Réparation mise à jour." }
+            }
+        })
+    }
+
+    // Changer le technicien d'une réparation en un clic (depuis la fiche).
+    function reassignRepair(id) {
+        var r = AppData.reparation(id)
+        if (!r) return
+        UI.openForm({
+            title: "Réaffecter la réparation", subtitle: Fmt.repairId(id) + " · choisissez le nouveau technicien.", icon: "user-cog", submitText: "Réaffecter",
+            values: { technicienId: r.technicienId },
+            fields: [{ key: "technicienId", label: "Technicien", type: "select", required: true, options: technicienOptions(), placeholder: "Choisir le technicien" }],
+            onSubmit: function (v) {
+                AppData.updateReparation(id, { appareilId: r.appareilId, technicienId: v.technicienId, panne: r.panne })
+                return { ok: true, message: "Réparation confiée à " + AppData.technicienName(v.technicienId) + "." }
             }
         })
     }

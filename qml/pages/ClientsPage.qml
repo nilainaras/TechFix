@@ -112,11 +112,10 @@ PageScaffold {
 
                 Rectangle { Layout.fillWidth: true; height: 1; color: Theme.border }
 
-                GridLayout {
+                // 3 colonnes de même largeur (RowLayout : fiable sur toutes les versions de Qt)
+                RowLayout {
                     Layout.fillWidth: true
-                    columns: 3
-                    columnSpacing: 0
-                    uniformCellWidths: true
+                    spacing: 8
                     Repeater {
                         model: [
                             { label: "Appareils", value: String(card.modelData.devices) },
@@ -126,28 +125,30 @@ PageScaffold {
                         delegate: ColumnLayout {
                             required property var modelData
                             Layout.fillWidth: true
+                            Layout.preferredWidth: 1
                             spacing: 2
-                            Txt { text: modelData.value; variant: "strong"; font.pixelSize: Theme.fsLg }
-                            Txt { text: modelData.label; variant: "caption" }
+                            Txt { text: modelData.value; variant: "strong"; font.pixelSize: Theme.fsLg; Layout.fillWidth: true; elide: Text.ElideRight }
+                            Txt { text: modelData.label; variant: "caption"; Layout.fillWidth: true; elide: Text.ElideRight }
                         }
                     }
                 }
 
+                // Pied de carte : l'état sur une ligne, les deux boutons dessous (jamais plus larges que la carte)
+                Tag {
+                    tone: card.modelData.active > 0 ? "primary" : ""
+                    icon: "wrench"; small: true
+                    text: card.modelData.active === 0 ? "Aucune réparation en cours" : card.modelData.active + " en cours"
+                }
                 RowLayout {
                     Layout.fillWidth: true
                     spacing: 8
-                    Tag {
-                        tone: card.modelData.active > 0 ? "primary" : ""
-                        icon: "wrench"; small: true
-                        text: card.modelData.active === 0 ? "Aucune réparation en cours"
-                              : card.modelData.active + (card.modelData.active > 1 ? " en cours" : " en cours")
-                    }
-                    Item { Layout.fillWidth: true }
                     AppButton {
-                        icon: "laptop"; variant: "ghost"; compact: true; text: "Appareils"
+                        Layout.fillWidth: true
+                        icon: "laptop"; variant: "secondary"; compact: true; text: "Appareils"
                         onClicked: UI.goSearch("devices", card.modelData.nom)
                     }
                     AppButton {
+                        Layout.fillWidth: true
                         text: "Réparation"; icon: "plus"; variant: "soft"; compact: true
                         onClicked: Forms.newRepair(card.modelData.id)
                     }

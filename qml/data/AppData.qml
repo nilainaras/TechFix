@@ -3,7 +3,25 @@ import QtQuick
 import "DemoData.js" as Demo   // DEMO (1/3) : à supprimer avec DemoData.js
 import TechFix
 
-
+// ─────────────────────────────────────────────────────────────────────────────
+//  AppData — données EN MÉMOIRE (aucun backend pour l'instant).
+//
+//  Les 5 tables du sujet sont des tableaux JavaScript :
+//    clients      { id, nom, telephone }
+//    appareils    { id, clientId, type, marque, modele, numeroSerie }
+//    techniciens  { id, nom, specialite }
+//    reparations  { id, appareilId, technicienId, panne, dateDepot, statut, timeline }
+//    interventions{ id, reparationId, description, cout, date }
+//
+//  Règles métier appliquées ici :
+//    • une réparation suit : reçu → diagnostic → en réparation → terminé → livré
+//      (pas de saut d'étape, pas de retour en arrière) ;
+//    • le coût final = somme des interventions (jamais stocké, toujours calculé) ;
+//    • pour terminer une réparation, il faut au moins une intervention.
+//
+//  Le jour où le vrai backend arrivera, seul ce fichier sera remplacé :
+//  les pages appellent uniquement ces fonctions.
+// ─────────────────────────────────────────────────────────────────────────────
 QtObject {
     id: root
 
@@ -228,14 +246,29 @@ QtObject {
     // ── Réparations ─────────────────────────────────────────────────────────
     function addReparation(o) {
         var id = nextId(reparations)
-        var d = new Date()
+        var d = dayWithNowTime(o.dateDepot)
         reparations = reparations.concat([{ id: id, appareilId: o.appareilId, technicienId: o.technicienId, panne: o.panne,
                                             dateDepot: d, statut: 0, timeline: [{ statut: 0, date: d }] }])
         return id
     }
+    // Jour choisi + heure actuelle (jamais dans le futur) ; sans argument : maintenant.
+    function dayWithNowTime(day) {
+        var n = new Date()
+        if (!day) return n
+        var d = new Date(day.getFullYear(), day.getMonth(), day.getDate(), n.getHours(), n.getMinutes())
+        return d.getTime() > n.getTime() ? n : d
+    }
     function updateReparation(id, o) {
         reparations = reparations.map(function (r) {
-            return r.id === id ? Object.assign({}, r, { appareilId: o.appareilId, technicienId: o.technicienId, panne: o.panne }) : r
+            if (r.id !== id) return r
+            var upd = { appareilId: o.appareilId, technicienId: o.technicienId, panne: o.panne }
+            // la date de dépôt n'est modifiable que tant que l'appareil est au statut « Reçu »
+            if (o.dateDepot && r.statut === 0) {
+                var d = dayWithNowTime(o.dateDepot)
+                upd.dateDepot = d
+                upd.timeline = [{ statut: 0, date: d }]
+            }
+            return Object.assign({}, r, upd)
         })
     }
     function removeReparation(id) {

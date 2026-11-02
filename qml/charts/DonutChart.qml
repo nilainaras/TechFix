@@ -20,7 +20,7 @@ Item {
     }
     readonly property real side: Math.min(width, height)
     readonly property real radius: (side - thickness) / 2 - 6
-    readonly property real gap: 5                                   // degrés entre deux segments
+    readonly property real gap: 3                                   // degrés entre deux segments
     readonly property real capDeg: (thickness / 2) / Math.max(1, radius) * 180 / Math.PI
 
     // Début et amplitude de chaque arc, en degrés (0° = en haut, sens horaire).
@@ -32,7 +32,7 @@ Item {
         for (var i = 0; i < segments.length; i++) {
             var sweep = total > 0 ? segments[i].value / total * 360 : 0
             var g = nonZero > 1 ? gap : 0
-            var inset = nonZero > 1 ? capDeg * 0.75 : 0
+            var inset = 0
             out.push({ start: acc, sweep: sweep, a0: acc + g / 2 + inset, a1: acc + sweep - g / 2 - inset })
             acc += sweep
         }
@@ -91,7 +91,7 @@ Item {
                     strokeColor: root.segments[seg.index].color
                     strokeWidth: root.thickness + (seg.active ? 6 : 0)
                     fillColor: "transparent"
-                    capStyle: root.arcs.length > 1 ? ShapePath.RoundCap : ShapePath.FlatCap
+                    capStyle: ShapePath.FlatCap
                     Behavior on strokeWidth { NumberAnimation { duration: 140 } }
                     PathAngleArc {
                         centerX: stage.width / 2; centerY: stage.height / 2

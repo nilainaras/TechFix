@@ -19,13 +19,14 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
     app.setApplicationName(QStringLiteral("TechFix"));
-    app.setOrganizationName(QStringLiteral("TechFix"));
+    app.setOrganizationName(QStringLiteral("TechFix"));   // utilisé par QtCore.Settings (thème mémorisé)
     app.setApplicationVersion(QStringLiteral("1.0.0"));
     app.setWindowIcon(QIcon(QStringLiteral(":/assets/logo/techfix-icon.png")));
 
+    // Style "Basic" : le plus simple à personnaliser entièrement en QML.
     QQuickStyle::setStyle(QStringLiteral("Basic"));
 
-    // Polices embarquées (Inter + Plus Jakarta Sans)
+    // Polices embarquées (Inter + Plus Jakarta Sans) : rendu identique sur tous les PC.
     QDirIterator fonts(QStringLiteral(":/assets/fonts"), {QStringLiteral("*.ttf")}, QDir::Files);
     while (fonts.hasNext())
         QFontDatabase::addApplicationFont(fonts.next());

@@ -246,6 +246,11 @@ PageScaffold {
                         Txt { text: page.tech ? page.tech.nom : "—"; variant: "strong"; Layout.fillWidth: true; elide: Text.ElideRight }
                         Txt { text: page.tech ? page.tech.specialite : ""; variant: "caption"; Layout.fillWidth: true; elide: Text.ElideRight }
                     }
+                    AppButton {
+                        visible: page.rv !== null && page.rv.statut < 4
+                        text: "Réaffecter"; icon: "refresh-cw"; variant: "soft"; compact: true
+                        onClicked: Forms.reassignRepair(page.rv.id)
+                    }
                 }
             }
 

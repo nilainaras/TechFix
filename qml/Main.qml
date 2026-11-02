@@ -4,14 +4,8 @@ import QtQuick.Layouts
 import QtCore
 import TechFix
 
-// ─────────────────────────────────────────────────────────────────────────────
-//  Fenêtre principale de TechFix
-//    Sidebar (menu) | TopBar (recherche, notifications, thème) + page courante
-//  Au-dessus : panneau de formulaire, boîte de confirmation et notifications (toasts).
-// ─────────────────────────────────────────────────────────────────────────────
 ApplicationWindow {
     id: win
-
     width: 1440
     height: 900
     minimumWidth: 960
@@ -22,7 +16,6 @@ ApplicationWindow {
     color: Theme.bg
     font.family: Theme.fontBody
 
-    // ── Préférences mémorisées entre deux lancements ────────────────────────
     Settings {
         id: prefs
         category: "TechFix"
@@ -32,7 +25,6 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-        // on applique les préférences sans animation de couleur au démarrage
         Theme.animations = false
         Theme.dark = prefs.dark
         UI.sidebarCollapsed = prefs.sidebarCollapsed
@@ -84,6 +76,35 @@ ApplicationWindow {
     Sidebar {
         id: sidebar
         anchors { left: parent.left; top: parent.top; bottom: parent.bottom }
+    }
+
+    // Petite pastille sur le bord du menu : réduit / agrandit la barre latérale.
+    Rectangle {
+        id: edgeToggle
+        visible: !UI.compact
+        z: 20
+        width: 26; height: 26; radius: 13
+        x: sidebar.width - width / 2
+        y: Theme.topbarHeight - height / 2
+        color: edgeArea.containsMouse ? Theme.primary : Theme.surface
+        border.width: 1
+        border.color: edgeArea.containsMouse ? Theme.primary : Theme.border
+        Behavior on color { ColorAnimation { duration: Theme.durFast } }
+        Icon {
+            anchors.centerIn: parent
+            name: "chevron-left"; size: 15
+            color: edgeArea.containsMouse ? Theme.textOnPrimary : Theme.textMuted
+            rotation: UI.sidebarCollapsed ? 180 : 0
+            Behavior on rotation { NumberAnimation { duration: Theme.durNormal; easing.type: Easing.OutCubic } }
+        }
+        MouseArea {
+            id: edgeArea
+            anchors.fill: parent
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
+            onClicked: UI.sidebarCollapsed = !UI.sidebarCollapsed
+        }
+        Tip { side: "right"; text: UI.sidebarCollapsed ? "Agrandir le menu" : "Réduire le menu"; visible: edgeArea.containsMouse }
     }
 
     Item {

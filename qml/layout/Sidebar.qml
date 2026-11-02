@@ -148,14 +148,6 @@ Rectangle {
                 active: UI.page === "about"
                 onClicked: UI.go("about")
             }
-            SidebarItem {
-                visible: !UI.compact
-                width: parent.width
-                icon: UI.sidebarCollapsed ? "panel-left-open" : "panel-left-close"
-                label: "Réduire le menu"
-                rail: root.rail
-                onClicked: UI.sidebarCollapsed = !UI.sidebarCollapsed
-            }
         }
     }
 }

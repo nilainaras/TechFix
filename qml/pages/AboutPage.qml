@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.Layouts
 import TechFix
 
-// À propos : identité de l'application, fonctionnalités, technologies et équipe.
 PageScaffold {
     id: page
 
@@ -14,7 +13,7 @@ PageScaffold {
         { name: "Nilaina", role: "Frontend & Design" },
         { name: "Voary", role: "Frontend & Design" },
         { name: "Annicha", role: "Backend & Integration" },
-        { name: "Diary", role: "Backend & Integration" }
+        { name: "Diary", role: "Backend & Integraton" }
     ]
 
     readonly property var features: [
@@ -51,8 +50,7 @@ PageScaffold {
                     Layout.fillWidth: true
                     spacing: 8
                     Tag { text: "Version 1.0.0"; tone: "primary"; icon: "badge-check" }
-                    Tag { text: "Interface uniquement"; icon: "layout-dashboard" }
-                    Tag { text: "Projet 4 · L1 Informatique" }
+                    Tag { text: "Application Desktop"; icon: "layout-dashboard" }
                 }
             }
         }
