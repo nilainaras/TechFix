@@ -91,20 +91,6 @@ Les données fictives sont isolées dans **un seul fichier** (`qml/data/DemoData
   2. dans `AppData.qml`, retirer les 3 lignes marquées `// DEMO` ;
   3. dans `load()`, remplacer les listes vides par le résultat des requêtes SQL.
 
-Ce que le backend doit fournir (les 5 tables du sujet) :
-
-| Liste dans `AppData` | Champs |
-|---|---|
-| `clients` | `id, nom, telephone` |
-| `appareils` | `id, clientId, type, marque, modele, numeroSerie` |
-| `techniciens` | `id, nom, specialite` |
-| `reparations` | `id, appareilId, technicienId, panne, dateDepot, statut (0 à 4), timeline` |
-| `interventions` | `id, reparationId, description, cout, date` |
-
-Relations : client 1—N appareil, appareil 1—N réparation, technicien 1—N réparation, réparation 1—N intervention.
-
-Les fonctions d'écriture d'`AppData` (`addClient`, `updateReparation`, `advanceStatus`, `addIntervention`, `removeXxx`…) sont les seuls endroits où les pages modifient les données : c'est là qu'il faudra appeler la base (INSERT, UPDATE, DELETE) avant de mettre à jour la liste en mémoire. Les règles métier y sont déjà.
-
 ## Raccourcis
 
 `Ctrl+K` recherche globale · `Alt+←` retour · bascule clair/sombre dans la barre du haut.
@@ -121,4 +107,4 @@ Les fonctions d'écriture d'`AppData` (`addClient`, `updateReparation`, `advance
 - Polices **Inter** et **Plus Jakarta Sans** : SIL Open Font License 1.1.
 - Icônes **Lucide** : licence ISC.
 
-Les licences complètes sont dans `assets/`. La licence du projet lui-même reste à choisir par l'équipe.
+MIT
