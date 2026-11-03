@@ -5,7 +5,7 @@ project(TechFix VERSION 1.0.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6.8 REQUIRED COMPONENTS Quick QuickControls2)
+find_package(Qt6 6.8 REQUIRED COMPONENTS Quick QuickControls2 Sql)
 
 qt_standard_project_setup(REQUIRES 6.8)
 
@@ -58,7 +58,7 @@ qt_add_qml_module(appTechFix
         # données fictives
         qml/data/AppData.qml
         qml/data/Forms.qml
-        qml/data/DemoData.js
+
 
         # composants réutilisables
         qml/components/Txt.qml
@@ -125,6 +125,7 @@ qt_add_qml_module(appTechFix
         qml/pages/HistoryPage.qml
         qml/pages/SettingsPage.qml
         qml/pages/AboutPage.qml
+        SOURCES src/db.h src/db.cpp
 )
 
 # ── Ressources : polices et logo ─────────────────────────────────────────────
@@ -146,6 +147,7 @@ qt_add_resources(appTechFix "techfix_assets"
 target_link_libraries(appTechFix PRIVATE
     Qt6::Quick
     Qt6::QuickControls2
+    Qt6::Sql
 )
 
 include(GNUInstallDirs)
