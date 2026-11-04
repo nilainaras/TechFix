@@ -1,7 +1,7 @@
 // TechFix — point d'entrée.
 // Interface uniquement : tout le contenu visuel vit dans le module QML "TechFix" (dossier qml/).
 // Aucun backend pour l'instant : les données de démonstration sont dans qml/data/.
-
+#include <QVariant>
 #include <QDirIterator>
 #include <QFontDatabase>
 #include <QGuiApplication>
@@ -9,6 +9,11 @@
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
 #include <QSurfaceFormat>
+#include <QtQml>
+#include <QDebug>
+#include <QtSql/QSqlDatabase>
+#include <QtSql/QSqlError>
+#include "db.h"
 
 int main(int argc, char *argv[])
 {
@@ -25,6 +30,9 @@ int main(int argc, char *argv[])
 
     // Style "Basic" : le plus simple à personnaliser entièrement en QML.
     QQuickStyle::setStyle(QStringLiteral("Basic"));
+    Db db;
+    qmlRegisterSingletonInstance("TechFix", 1, 0, "Db", &db);
+
 
     // Polices embarquées (Inter + Plus Jakarta Sans) : rendu identique sur tous les PC.
     QDirIterator fonts(QStringLiteral(":/assets/fonts"), {QStringLiteral("*.ttf")}, QDir::Files);
@@ -37,7 +45,12 @@ int main(int argc, char *argv[])
         &app, []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
 
+    bool ok=db.connecter();
+    qDebug() << "Resultat de la connexion a MYSQL : "<< ok;
+
     engine.loadFromModule(QStringLiteral("TechFix"), QStringLiteral("Main"));
+
+    qDebug () << "Drivers :" << QSqlDatabase::drivers();
 
     return app.exec();
 }

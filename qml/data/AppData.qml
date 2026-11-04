@@ -1,27 +1,7 @@
 pragma Singleton
 import QtQuick
-import "DemoData.js" as Demo   // DEMO (1/3) : à supprimer avec DemoData.js
 import TechFix
 
-// ─────────────────────────────────────────────────────────────────────────────
-//  AppData — données EN MÉMOIRE (aucun backend pour l'instant).
-//
-//  Les 5 tables du sujet sont des tableaux JavaScript :
-//    clients      { id, nom, telephone }
-//    appareils    { id, clientId, type, marque, modele, numeroSerie }
-//    techniciens  { id, nom, specialite }
-//    reparations  { id, appareilId, technicienId, panne, dateDepot, statut, timeline }
-//    interventions{ id, reparationId, description, cout, date }
-//
-//  Règles métier appliquées ici :
-//    • une réparation suit : reçu → diagnostic → en réparation → terminé → livré
-//      (pas de saut d'étape, pas de retour en arrière) ;
-//    • le coût final = somme des interventions (jamais stocké, toujours calculé) ;
-//    • pour terminer une réparation, il faut au moins une intervention.
-//
-//  Le jour où le vrai backend arrivera, seul ce fichier sera remplacé :
-//  les pages appellent uniquement ces fonctions.
-// ─────────────────────────────────────────────────────────────────────────────
 QtObject {
     id: root
 
@@ -42,20 +22,27 @@ QtObject {
     //  demoMode = true  : données fictives générées par DemoData.js
     //  demoMode = false : listes vides, prêt pour la vraie base de données.
     //  Voir « Brancher la base de données » dans le README (3 lignes marquées DEMO à retirer).
-    readonly property bool demoMode: true   // DEMO (2/3)
+    readonly property bool demoMode: false   // DEMO (2/3)
 
     Component.onCompleted: load()
 
     // POINT D'ENTRÉE UNIQUE : charge les 5 tables en mémoire.
     // Avec une base de données, c'est ici qu'on remplace les tableaux par le résultat des requêtes.
+    // Message affiché quand la base refuse ou rate une écriture.
+    readonly property string dbErrorMessage: "L'enregistrement dans la base de données a échoué."
+    function dbFail() { UI.toast(dbErrorMessage, "danger") }
+
     function load() {
-        var d = demoMode ? Demo.build()   // DEMO (3/3)
-                         : { clients: [], appareils: [], techniciens: [], reparations: [], interventions: [] }
-        clients = d.clients
-        appareils = d.appareils
-        techniciens = d.techniciens
-        reparations = d.reparations
-        interventions = d.interventions
+        var d = Db.loadAll()
+        // « || [] » : si la base est injoignable, l'interface s'affiche vide au lieu de planter
+        clients = d.clients || []
+        appareils = d.appareils || []
+        techniciens = d.techniciens || []
+        reparations = d.reparations || []
+        // Via ODBC, un DECIMAL peut arriver en texte : on force un nombre pour que les totaux s'additionnent.
+        interventions = (d.interventions || []).map(function (i) {
+            return Object.assign({}, i, { cout: Number(i.cout) })
+        })
         now = new Date()
     }
     function reset() { load() }   // utilisé par Paramètres > « Restaurer les données d'exemple »
@@ -173,6 +160,8 @@ QtObject {
     function advanceStatus(repId) {
         var info = nextStatusInfo(repId)
         if (!info.ok) return { ok: false, message: info.reason }
+        if (!Db.advanceStatus(repId, info.next))
+            return { ok: false, message: dbErrorMessage }
         var d = new Date()
         reparations = reparations.map(function (r) {
             if (r.id !== repId) return r
@@ -196,84 +185,87 @@ QtObject {
     }
 
     // ── Clients ─────────────────────────────────────────────────────────────
+    // Principe : on écrit d'abord dans la base ; la liste en mémoire n'est mise à jour que si ça a réussi.
     function addClient(o) {
-        var id = nextId(clients)
+        var id = Db.addClient(o.nom, o.telephone)
+        if (id < 0) { dbFail(); return -1 }
         clients = clients.concat([{ id: id, nom: o.nom, telephone: o.telephone }])
         return id
     }
     function updateClient(id, o) {
+        if (!Db.updateClient(id, o.nom, o.telephone)) { dbFail(); return false }
         clients = clients.map(function (c) { return c.id === id ? Object.assign({}, c, { nom: o.nom, telephone: o.telephone }) : c })
+        return true
     }
     function removeClient(id) {
-        var devs = appareilsOf(id)
-        for (var i = 0; i < devs.length; i++) removeAppareil(devs[i].id)
-        clients = clients.filter(function (c) { return c.id !== id })
+        // La base supprime aussi appareils, réparations et interventions (ON DELETE CASCADE) : on recharge ensuite.
+        if (!Db.removeClient(id)) { dbFail(); return false }
+        load()
+        return true
     }
 
     // ── Appareils ───────────────────────────────────────────────────────────
     function addAppareil(o) {
-        var id = nextId(appareils)
+        var id = Db.addAppareil(o.clientId, o.type, o.marque, o.modele, o.numeroSerie)
+        if (id < 0) { dbFail(); return -1 }
         appareils = appareils.concat([{ id: id, clientId: o.clientId, type: o.type, marque: o.marque, modele: o.modele, numeroSerie: o.numeroSerie }])
         return id
     }
     function updateAppareil(id, o) {
+        if (!Db.updateAppareil(id, o.clientId, o.type, o.marque, o.modele, o.numeroSerie)) { dbFail(); return false }
         appareils = appareils.map(function (a) {
             return a.id === id ? Object.assign({}, a, { clientId: o.clientId, type: o.type, marque: o.marque, modele: o.modele, numeroSerie: o.numeroSerie }) : a
         })
+        return true
     }
     function removeAppareil(id) {
-        var reps = reparations.filter(function (r) { return r.appareilId === id })
-        for (var i = 0; i < reps.length; i++) removeReparation(reps[i].id)
-        appareils = appareils.filter(function (a) { return a.id !== id })
+        if (!Db.removeAppareil(id)) { dbFail(); return false }
+        load()
+        return true
     }
 
     // ── Techniciens ─────────────────────────────────────────────────────────
     function addTechnicien(o) {
-        var id = nextId(techniciens)
+        var id = Db.addTechnicien(o.nom, o.specialite)
+        if (id < 0) { dbFail(); return -1 }
         techniciens = techniciens.concat([{ id: id, nom: o.nom, specialite: o.specialite }])
         return id
     }
     function updateTechnicien(id, o) {
+        if (!Db.updateTechnicien(id, o.nom, o.specialite)) { dbFail(); return false }
         techniciens = techniciens.map(function (t) { return t.id === id ? Object.assign({}, t, { nom: o.nom, specialite: o.specialite }) : t })
+        return true
     }
     function removeTechnicien(id) {
         var used = reparations.some(function (r) { return r.technicienId === id })
         if (used) return { ok: false, message: "Ce technicien est rattaché à des réparations : réaffectez-les avant de le supprimer." }
+        var res = Db.removeTechnicien(id)
+        if (!res.ok) return { ok: false, message: res.message }
         techniciens = techniciens.filter(function (t) { return t.id !== id })
         return { ok: true, message: "Technicien supprimé." }
     }
 
     // ── Réparations ─────────────────────────────────────────────────────────
     function addReparation(o) {
-        var id = nextId(reparations)
-        var d = dayWithNowTime(o.dateDepot)
+        var id = Db.addReparation(o.appareilId, o.technicienId, o.panne)
+        if (id < 0) { dbFail(); return -1 }
+        var d = new Date()
         reparations = reparations.concat([{ id: id, appareilId: o.appareilId, technicienId: o.technicienId, panne: o.panne,
                                             dateDepot: d, statut: 0, timeline: [{ statut: 0, date: d }] }])
         return id
     }
-    // Jour choisi + heure actuelle (jamais dans le futur) ; sans argument : maintenant.
-    function dayWithNowTime(day) {
-        var n = new Date()
-        if (!day) return n
-        var d = new Date(day.getFullYear(), day.getMonth(), day.getDate(), n.getHours(), n.getMinutes())
-        return d.getTime() > n.getTime() ? n : d
-    }
     function updateReparation(id, o) {
+        if (!Db.updateReparation(id, o.appareilId, o.technicienId, o.panne)) { dbFail(); return false }
         reparations = reparations.map(function (r) {
-            if (r.id !== id) return r
-            var upd = { appareilId: o.appareilId, technicienId: o.technicienId, panne: o.panne }
-            // la date de dépôt n'est modifiable que tant que l'appareil est au statut « Reçu »
-            if (o.dateDepot && r.statut === 0) {
-                var d = dayWithNowTime(o.dateDepot)
-                upd.dateDepot = d
-                upd.timeline = [{ statut: 0, date: d }]
-            }
-            return Object.assign({}, r, upd)
+            return r.id === id ? Object.assign({}, r, { appareilId: o.appareilId, technicienId: o.technicienId, panne: o.panne }) : r
         })
+        return true
     }
     function removeReparation(id) {
-        interventions = interventions.filter(function (i) { return i.reparationId !== id })
-        reparations = reparations.filter(function (r) { return r.id !== id })
+        // Interventions et historique de statuts sont supprimés par la base (cascade).
+        if (!Db.removeReparation(id)) { dbFail(); return false }
+        load()
+        return true
     }
 
     // ── Interventions ───────────────────────────────────────────────────────
@@ -286,7 +278,9 @@ QtObject {
         if (!rep) return { ok: false, message: "Réparation introuvable." }
         if (rep.statut < 1) return { ok: false, message: "Passez d'abord la réparation en « Diagnostic » avant de saisir des interventions." }
         if (rep.statut > 2) return { ok: false, message: "La réparation est terminée : ses interventions sont figées." }
-        interventions = interventions.concat([{ id: nextId(interventions), reparationId: repId, description: description, cout: cout, date: new Date() }])
+        if (!Db.addIntervention(repId, description, cout))
+            return { ok: false, message: dbErrorMessage }
+        load()   // récupère l'identifiant et la date générés par la base
         return { ok: true, message: "Intervention ajoutée." }
     }
     function removeIntervention(id) {
@@ -295,6 +289,8 @@ QtObject {
         var rep = byId(reparations, it.reparationId)
         if (rep && rep.statut >= 3)
             return { ok: false, message: "La réparation est terminée : ses interventions sont figées." }
+        if (!Db.removeIntervention(id))
+            return { ok: false, message: dbErrorMessage }
         interventions = interventions.filter(function (i) { return i.id !== id })
         return { ok: true, message: "Intervention supprimée." }
     }
