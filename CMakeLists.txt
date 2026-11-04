@@ -120,7 +120,6 @@ qt_add_qml_module(appTechFix
         qml/pages/ClientsPage.qml
         qml/pages/DevicesPage.qml
         qml/pages/TechniciansPage.qml
-        qml/pages/InvoicesPage.qml
         qml/pages/StatsPage.qml
         qml/pages/HistoryPage.qml
         qml/pages/SettingsPage.qml

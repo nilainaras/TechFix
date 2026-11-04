@@ -97,16 +97,10 @@ PageScaffold {
                 Tag { text: "QML"; tone: "primary" }
                 Tag { text: "Quick Controls (Basic)" }
                 Tag { text: "CMake" }
+                Tag { text: "JavaScript (Chart Design)" }
                 Tag { text: "MinGW" }
-                Tag { text: "Plus Jakarta Sans & Inter" }
+                Tag { text: "Plus Jakarta Sans & Inter (font)" }
                 Tag { text: "Icônes Lucide" }
-            }
-            Txt {
-                text: AppData.demoMode ? "Les données affichées sont fictives et conservées en mémoire. Le backend (base de données) sera branché plus tard sans toucher aux pages." : "Les données sont lues depuis la base de données de l'atelier."
-                variant: "caption"
-                Layout.fillWidth: true
-                wrapMode: Text.WordWrap
-                lineHeight: 1.25
             }
         }
 

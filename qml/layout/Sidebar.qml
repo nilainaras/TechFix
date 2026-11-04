@@ -22,7 +22,6 @@ Rectangle {
             { key: "devices", label: "Appareils", icon: "laptop" },
             { key: "technicians", label: "Techniciens", icon: "user-cog" } ] },
         { title: "Suivi", items: [
-            { key: "invoices", label: "Factures", icon: "receipt" },
             { key: "history", label: "Historique", icon: "history" },
             { key: "stats", label: "Statistiques", icon: "chart-column" } ] }
     ]

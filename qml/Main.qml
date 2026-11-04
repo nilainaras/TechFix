@@ -60,7 +60,6 @@ ApplicationWindow {
     Component { id: clientsPage; ClientsPage {} }
     Component { id: devicesPage; DevicesPage {} }
     Component { id: techniciansPage; TechniciansPage {} }
-    Component { id: invoicesPage; InvoicesPage {} }
     Component { id: statsPage; StatsPage {} }
     Component { id: historyPage; HistoryPage {} }
     Component { id: settingsPage; SettingsPage {} }
@@ -68,7 +67,7 @@ ApplicationWindow {
 
     readonly property var routes: ({
         dashboard: dashboardPage, repairs: repairsPage, repair: repairPage, clients: clientsPage,
-        devices: devicesPage, technicians: techniciansPage, invoices: invoicesPage, stats: statsPage,
+        devices: devicesPage, technicians: techniciansPage, stats: statsPage,
         history: historyPage, settings: settingsPage, about: aboutPage
     })
 
