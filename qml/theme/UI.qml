@@ -61,7 +61,6 @@ QtObject {
         case "clients": return "Clients"
         case "devices": return "Appareils"
         case "technicians": return "Techniciens"
-        case "invoices": return "Factures"
         case "stats": return "Statistiques"
         case "history": return "Historique"
         case "settings": return "Paramètres"
