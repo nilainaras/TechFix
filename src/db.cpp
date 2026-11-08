@@ -190,17 +190,17 @@ QVariantMap Db::loadAll()
     connecter();   // ouvre la connexion si besoin (sans effet si elle est déjà ouverte)
     QVariantMap out;
     out["clients"] = lire("SELECT id_client AS id, nom, telephone FROM client ORDER BY id_client");
-    out["appareils"] = lire("SELECT id_appareil AS id, id_client AS clientId, type, marque, modele, "
+    out["appareils"] = lire("SELECT id_appareil AS id, client_id_client AS clientId, type, marque, modele, "
                             "numero_serie AS numeroSerie FROM appareil ORDER BY id_appareil");
     out["techniciens"] = lire("SELECT id_technicien AS id, nom, specialite FROM technicien ORDER BY id_technicien");
-    out["interventions"] = lire("SELECT id_intervention AS id, id_reparation AS reparationId, description, cout, "
+    out["interventions"] = lire("SELECT id_intervention AS id, reparation_id_reparation AS reparationId, description, cout, "
                                 "date_intervention AS date FROM intervention ORDER BY id_intervention");
 
     // Réparations + leur frise (timeline = historique des statuts)
-    QVariantList reps = lire("SELECT id_reparation AS id, id_appareil AS appareilId, id_technicien AS technicienId, "
+    QVariantList reps = lire("SELECT id_reparation AS id, appareil_id_appareil AS appareilId, technicien_id_technicien AS technicienId, "
                              "panne, date_depot AS dateDepot, statut FROM reparation ORDER BY id_reparation");
     QHash<int, QVariantList> timelines;
-    for (const QVariant &v : lire("SELECT id_reparation AS repId, statut, date_changement AS date "
+    for (const QVariant &v : lire("SELECT reparation_id_reparation AS repId, statut, date_changement AS date "
                                   "FROM historique_statut ORDER BY date_changement, id_historique")) {
         QVariantMap h = v.toMap();
         timelines[h["repId"].toInt()].append(QVariantMap{{"statut", h["statut"]}, {"date", h["date"]}});
@@ -236,14 +236,14 @@ int Db::addAppareil(int clientId, const QString &type, const QString &marque,
                     const QString &modele, const QString &numeroSerie)
 {
     QVariant id;
-    return ecrire("INSERT INTO appareil (id_client, type, marque, modele, numero_serie) VALUES (?, ?, ?, ?, ?)",
+    return ecrire("INSERT INTO appareil (client_id_client, type, marque, modele, numero_serie) VALUES (?, ?, ?, ?, ?)",
                   {clientId, type, marque, modele, numeroSerie}, &id) ? id.toInt() : -1;
 }
 
 bool Db::updateAppareil(int id, int clientId, const QString &type, const QString &marque,
                         const QString &modele, const QString &numeroSerie)
 {
-    return ecrire("UPDATE appareil SET id_client = ?, type = ?, marque = ?, modele = ?, numero_serie = ? "
+    return ecrire("UPDATE appareil SET client_id_client = ?, type = ?, marque = ?, modele = ?, numero_serie = ? "
                   "WHERE id_appareil = ?", {clientId, type, marque, modele, numeroSerie, id});
 }
 
@@ -279,7 +279,7 @@ int Db::addReparation(int appareilId, int technicienId, const QString &panne)
     QSqlDatabase db = QSqlDatabase::database();
     db.transaction();   // la réparation et sa première étape « Reçu » sont créées ensemble ou pas du tout
     QVariant id;
-    if (ecrire("INSERT INTO reparation (id_appareil, id_technicien, panne, date_depot, statut) "
+    if (ecrire("INSERT INTO reparation (appareil_id_appareil, technicien_id_technicien, panne, date_depot, statut) "
                "VALUES (?, ?, ?, NOW(), 0)", {appareilId, technicienId, panne}, &id)
         && ecrire("INSERT INTO historique_statut (id_reparation, statut, date_changement) VALUES (?, 0, NOW())", {id})) {
         db.commit();
@@ -291,7 +291,7 @@ int Db::addReparation(int appareilId, int technicienId, const QString &panne)
 
 bool Db::updateReparation(int id, int appareilId, int technicienId, const QString &panne)
 {
-    return ecrire("UPDATE reparation SET id_appareil = ?, id_technicien = ?, panne = ? WHERE id_reparation = ?",
+    return ecrire("UPDATE reparation SET appareil_id_appareil = ?, technicien_id_technicien = ?, panne = ? WHERE id_reparation = ?",
                   {appareilId, technicienId, panne, id});
 }
 
@@ -315,7 +315,7 @@ bool Db::advanceStatus(int repId, int nouveauStatut)
 // ── Interventions ───────────────────────────────────────────────────────────
 bool Db::addIntervention(int repId, const QString &description, int cout)
 {
-    return ecrire("INSERT INTO intervention (id_reparation, description, cout, date_intervention) "
+    return ecrire("INSERT INTO intervention (reparation_id_reparation, description, cout, date_intervention) "
                   "VALUES (?, ?, ?, NOW())", {repId, description, cout});
 }
 
