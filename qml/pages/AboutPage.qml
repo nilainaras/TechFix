@@ -20,7 +20,6 @@ PageScaffold {
         { icon: "wrench", title: "Suivi des réparations", text: "Cartes, liste ou kanban : chaque dossier avance étape par étape." },
         { icon: "activity", title: "Règle des statuts", text: "Reçu, diagnostic, en réparation, terminé, livré : sans saut ni retour en arrière." },
         { icon: "coins", title: "Coût calculé", text: "Le coût final est la somme des interventions, jamais saisi à la main." },
-        { icon: "receipt", title: "Factures automatiques", text: "Générées dès qu'une réparation est terminée." },
         { icon: "chart-column", title: "Tableau de bord", text: "Indicateurs, courbes et retards pour piloter l'atelier." },
         { icon: "palette", title: "Thème clair et sombre", text: "Un confort visuel adapté à la journée comme au soir." }
     ]

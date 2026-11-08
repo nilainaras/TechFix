@@ -27,7 +27,6 @@ Construite avec **Qt Quick (QML)**, Qt 6.8+, CMake et une base **MySQL**. Projet
 - **Frise des étapes** : *Reçu → Diagnostic → En réparation → Terminé → Livré*, étape par étape, sans saut ni retour en arrière.
 - **Interventions et coûts** : chaque intervention a une description et un coût (5 000 Ar minimum) ; le coût final de la réparation est la somme de ses interventions, calculé automatiquement.
 - **Techniciens** : charge de travail et réparations en cours.
-- **Factures** : générées dès qu'une réparation est terminée.
 - **Tableau de bord, statistiques et historique** : indicateurs, graphiques (dessinés en QML pur), réparations en retard, journal des événements.
 - **Confort** : thème clair et sombre, interface adaptée à la taille de la fenêtre, recherche globale (`Ctrl+K`), notifications, animations, formulaires en panneau latéral.
 
@@ -59,7 +58,7 @@ TechFix/
 ├── CMakeLists.txt          Module QML « TechFix », fichiers et ressources (Qt Quick + Qt Sql)
 ├── .gitignore
 ├── README.md
-├── database/
+├── base_de_donnee/
 │   └── atelier.sql         Script de création de la base MySQL (structure commune au groupe)
 ├── src/
 │   ├── main.cpp            Démarre Qt, charge polices, style Basic, connecte la base, charge Main.qml
@@ -79,7 +78,7 @@ TechFix/
     ├── charts/             Graphiques en QML pur : courbe, barres, anneau, mini-courbe
     ├── layout/             Menu latéral, barre du haut, recherche globale, notifications
     └── pages/              Une page = un fichier : Dashboard, Repairs, RepairDetail, Clients,
-                            Devices, Technicians, Invoices, Stats, History, Settings, About
+                            Devices, Technicians, Stats, History, Settings, About
 ```
 
 **Principe** : les pages ne contiennent que de l'affichage. Elles lisent et modifient les données uniquement via `AppData`, et passent par `UI` pour naviguer ou afficher une notification. `AppData` garde les règles métier et appelle `Db` (C++) pour lire et écrire dans la base : `load()` charge les listes au démarrage, et chaque fonction d'ajout, de modification ou de suppression écrit d'abord dans la base avant de mettre à jour l'affichage.

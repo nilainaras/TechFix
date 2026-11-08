@@ -1,6 +1,3 @@
-// TechFix — point d'entrée.
-// Interface uniquement : tout le contenu visuel vit dans le module QML "TechFix" (dossier qml/).
-// Aucun backend pour l'instant : les données de démonstration sont dans qml/data/.
 #include <QVariant>
 #include <QDirIterator>
 #include <QFontDatabase>

@@ -22,12 +22,10 @@ QtObject {
     //  demoMode = true  : données fictives générées par DemoData.js
     //  demoMode = false : listes vides, prêt pour la vraie base de données.
     //  Voir « Brancher la base de données » dans le README (3 lignes marquées DEMO à retirer).
-    readonly property bool demoMode: false   // DEMO (2/3)
+    readonly property bool demoMode: false
 
     Component.onCompleted: load()
 
-    // POINT D'ENTRÉE UNIQUE : charge les 5 tables en mémoire.
-    // Avec une base de données, c'est ici qu'on remplace les tableaux par le résultat des requêtes.
     // Message affiché quand la base refuse ou rate une écriture.
     readonly property string dbErrorMessage: "L'enregistrement dans la base de données a échoué."
     function dbFail() { UI.toast(dbErrorMessage, "danger") }
