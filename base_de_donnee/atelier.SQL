@@ -35,8 +35,8 @@ CREATE TABLE IF NOT EXISTS `atelier`.`appareil` (
   CONSTRAINT `fk_appareil_client1`
     FOREIGN KEY (`client_id_client`)
     REFERENCES `atelier`.`client` (`id_client`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE                         -- regle pour la suppression
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `atelier`.`reparation` (
   `id_reparation` INT NOT NULL AUTO_INCREMENT,
   `panne` TEXT NOT NULL,
   `date_depot` DATE NOT NULL,
-  `statut` VARCHAR(30) NOT NULL,
+  `statut` int(11) NOT NULL DEFAULT 0 CHECK (`statut` between 0 and 4),
   `appareil_id_appareil` INT NOT NULL,
   `technicien_id_technicien` INT NOT NULL,
   PRIMARY KEY (`id_reparation`),
@@ -67,13 +67,13 @@ CREATE TABLE IF NOT EXISTS `atelier`.`reparation` (
   CONSTRAINT `fk_reparation_appareil1`
     FOREIGN KEY (`appareil_id_appareil`)
     REFERENCES `atelier`.`appareil` (`id_appareil`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_reparation_technicien1`
     FOREIGN KEY (`technicien_id_technicien`)
     REFERENCES `atelier`.`technicien` (`id_technicien`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -91,8 +91,8 @@ CREATE TABLE IF NOT EXISTS `atelier`.`intervention` (
   CONSTRAINT `fk_intervention_reparation11`
     FOREIGN KEY (`reparation_id_reparation`)
     REFERENCES `atelier`.`reparation` (`id_reparation`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -104,15 +104,15 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `atelier`.`historique_statut` (
   `id_historique` INT NOT NULL AUTO_INCREMENT,
   `reparation_id_reparation` INT NOT NULL,
-  `statut` VARCHAR(30) NOT NULL,
+  `statut` int(11) NOT NULL,
   `date_changement` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_historique`),
   INDEX `fk_historique_reparation1_idx` (`reparation_id_reparation` ASC) VISIBLE,
   CONSTRAINT `fk_historique_reparation1`
     FOREIGN KEY (`reparation_id_reparation`)
     REFERENCES `atelier`.`reparation` (`id_reparation`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 

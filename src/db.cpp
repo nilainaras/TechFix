@@ -281,7 +281,7 @@ int Db::addReparation(int appareilId, int technicienId, const QString &panne)
     QVariant id;
     if (ecrire("INSERT INTO reparation (appareil_id_appareil, technicien_id_technicien, panne, date_depot, statut) "
                "VALUES (?, ?, ?, NOW(), 0)", {appareilId, technicienId, panne}, &id)
-        && ecrire("INSERT INTO historique_statut (id_reparation, statut, date_changement) VALUES (?, 0, NOW())", {id})) {
+        && ecrire("INSERT INTO historique_statut (reparation_id_reparation, statut, date_changement) VALUES (?, 0, NOW())", {id})) {
         db.commit();
         return id.toInt();
     }
@@ -305,7 +305,7 @@ bool Db::advanceStatus(int repId, int nouveauStatut)
     QSqlDatabase db = QSqlDatabase::database();
     db.transaction();
     if (ecrire("UPDATE reparation SET statut = ? WHERE id_reparation = ?", {nouveauStatut, repId})
-        && ecrire("INSERT INTO historique_statut (id_reparation, statut, date_changement) VALUES (?, ?, NOW())",
+        && ecrire("INSERT INTO historique_statut (reparation_id_reparation, statut, date_changement) VALUES (?, ?, NOW())",
                   {repId, nouveauStatut}))
         return db.commit();
     db.rollback();
